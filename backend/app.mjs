@@ -87,6 +87,8 @@ app.post('/login', async (req, res) => {
     }
 });
 
+app.update
+
 app.post('/projects', async (req, res) => {
     try {
       const { data, error } = await supabase
@@ -132,6 +134,33 @@ app.delete('/projects/:id', async (req, res) => {
       res.status(500).json({ error: 'Internal Server Error' });
     }
   });
+
+app.put('/projects/:id', async (req, res) => {
+    const projectId = req.params.id;
+    const tasks = req.body.tasks;
+  
+    try {
+      const { data, error } = await supabase
+        .from('Project')
+        .update({ "tasks": tasks })
+        .eq('id', projectId);
+  
+      if (error) {
+        console.error('Error updating project:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        if (data && data.length > 0) {
+          res.status(200).json({ message: 'Project updated successfully', updatedProject: data[0] });
+        } else {
+          res.status(404).json({ error: 'Project not found' });
+        }
+      }
+    } catch (error) {
+      console.error('Error updating project:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+});
+  
   
 const port = 3000;
 

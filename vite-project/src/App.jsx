@@ -51,9 +51,9 @@ export default function App() {
   }
 
   const handleProjectSelect = (project) => {
-    setSelectedProject(project);
+    setSelectedProject({ ...project, id: project.id });
     console.log(project.description);
-  }
+  }  
 
   const handleFormChange = (event) => {
     const { name, value } = event.target;
@@ -199,11 +199,12 @@ export default function App() {
           <div className="w-3/4 h-full flex flex-col justify-center items-center">
             {selectedProject ? (
               <Project
-                title={selectedProject.title}
-                description={selectedProject.description}
-                date={selectedProject.date}
-                tasks={selectedProject.tasks}
-              />
+              id={selectedProject.id}
+              title={selectedProject.title}
+              description={selectedProject.description}
+              date={selectedProject.date}
+              tasks={selectedProject.tasks}
+            />
             ) : (
               <div className="h-1/6 flex flex-col items-center justify-between">
                 <h1 className="text-3xl font-bold text-stone-700">
