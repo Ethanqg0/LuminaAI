@@ -39,6 +39,6 @@ export default function Project(props) {
 Project.propTypes = {
     title: PropTypes.string.isRequired,
     date: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired, // Add this line for 'description'
+    description: PropTypes.string.isRequired,
     tasks: PropTypes.array,
 };
