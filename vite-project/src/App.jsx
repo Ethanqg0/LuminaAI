@@ -185,7 +185,6 @@ const handleLogin = async (email, password) => {
   return (
     <>
       <LoginPage handleLoginProp={handleLogin} />
-      <SignupPage />
       <Nav signOut={signOut} isLoggedIn={isLoggedIn} />
       <div className="w-full h-full flex items-center bg-white">
         <SideBar

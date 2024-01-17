@@ -71,12 +71,11 @@ export default function Project(props) {
   ));
   
   return (
-    (loading) ? ( "Loading..." ): (
     <div className="p-8 w-2/3 flex flex-row justify-center">
       <div className="flex flex-col">
-        <h1 className="text-3xl font-bold mb-2">{props.title}</h1>
-        <h1 className="text-2xl mb-2">Due Date: {props.date}</h1>
-        <h1 className="text-2xl mb-2">Description: {props.description}</h1>
+        <h1 className="text-3xl font-bold">{props.title}</h1>
+        <h1 className="text-xl text-stone-600 mb-8">Due Date: {props.date}</h1>
+        <h1 className="text-xl mb-2">Description: {props.description}</h1>
         <label htmlFor="task" className="block text-lg mb-1">
           Add Task:
         </label>
@@ -88,8 +87,9 @@ export default function Project(props) {
           className="border rounded p-2 focus:outline-none focus:border-blue-500 border-black focus:ring focus:ring-blue-200"
         />
         <button type="button" onClick={handleAddTask}>Add Task</button>
+        {tasks}
       </div>
-    </div>)
+    </div>
   );
 }
 
