@@ -2,15 +2,50 @@ import cors from 'cors';
 import express from 'express';
 import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
+import jwt from 'jsonwebtoken';
 
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_KEY;
+const authSecretKey = process.env.AUTH_SECRET_KEY; // Use the correct environment variable
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+function generateAuthToken(userId) {
+  const expiresIn = '1h';
+  const token = jwt.sign({ userId }, authSecretKey, { expiresIn }); // Use authSecretKey
+  return token;
+}
+
+function verifyAuthToken(token) {
+  try {
+    const decoded = jwt.verify(token, authSecretKey); // Use authSecretKey
+    return decoded;
+  } catch (error) {
+    // Token verification failed
+    console.error('Token verification failed:', error.message);
+    return null;
+  }
+}
+
+const verifyToken = (req, res, next) => {
+  const token = req.header('Authorization');
+  
+  if (!token) {
+    return res.status(401).json({ error: 'Unauthorized - No token provided' });
+  }
+
+  try {
+    const decoded = jwt.verify(token.replace('Bearer ', ''), authSecretKey);
+    req.user = decoded;
+    next();
+  } catch (error) {
+    return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+  }
+};
 
 app.post('/', async (req, res) => {
   try {
@@ -62,38 +97,40 @@ app.post('/createUser', async (req, res) => {
 });
 
 app.post('/login', async (req, res) => {
-    try {
-        const { email, password } = req.body;
-        console.log(email, password)
+  try {
+      const { email, password } = req.body;
 
-        if (!email || !password) {
-            return res.status(400).json({ error: 'Email and password are required' });
-        }
+      if (!email || !password) {
+          return res.status(400).json({ error: 'Email and password are required' });
+      }
 
-        const { data, error } = await supabase.auth.signInWithPassword({
-            email,
-            password,
-        });
+      const { data, error } = await supabase.auth.signInWithPassword({
+          email,
+          password,
+      });
 
-        if (error) {
-            console.error(error);
-            return res.status(401).json({ error: 'Login failed' });
-        }
+      if (error) {
+          console.error(error);
+          return res.status(401).json({ error: 'Login failed' });
+      }
 
-        // Send a success response
-        res.status(200).json({ success: 'Login successful', user: data.user });
-    } catch (error) {
-        console.error(error);
-        res.status(500).json({ error: 'Internal Server Error' });
-    }
+      // Generate a token
+      const token = generateAuthToken(data.user.id);
+
+      res.status(200).json({ success: 'Login successful', user: data.user, token });
+  } catch (error) {
+      console.error(error);
+      res.status(500).json({ error: 'Internal Server Error' });
+  }
 });
 
-app.post('/projects', async (req, res) => {
+
+app.post('/projects', verifyToken, async (req, res) => {
     try {
       const { data, error } = await supabase
         .from('Project')
         .insert([
-          { title: req.body.title, description: req.body.description, email: req.body.email },
+          { title: req.body.title, description: req.body.description, email: req.body.email, date: req.body.date, tasks: req.body.tasks },
         ])
         .select();
   
@@ -112,7 +149,7 @@ app.post('/projects', async (req, res) => {
     }
 });
 
-app.delete('/projects/:id', async (req, res) => {
+app.delete('/projects/:id', verifyToken, async (req, res) => {
     try {
       const projectId = req.params.id;
       console.log(projectId)
@@ -134,7 +171,7 @@ app.delete('/projects/:id', async (req, res) => {
     }
   });
 
-app.put('/projects/:id', async (req, res) => {
+app.put('/projects/:id', verifyToken, async (req, res) => {
     const projectId = req.params.id;
     const tasks = req.body.tasks;
   

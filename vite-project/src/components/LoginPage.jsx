@@ -19,7 +19,7 @@ export default function LoginPage({ handleLoginProp }) {
     
             if (response.ok) {
                 // Successful login
-                handleLoginProp(formData.email);
+                handleLoginProp(formData.email, formData.password);
                 console.log("success");
     
                 // Reset the form values

@@ -11,6 +11,8 @@ export default function App() {
   const [creatingProject, setCreatingProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
+  const [token, setToken] = useState(null);
+  const [showAuthorizationMessage, setAuthorizationMessage] = useState(false);
 
   const [formValues, setFormValues] = useState({
     title: "",
@@ -42,11 +44,40 @@ export default function App() {
     };
 
     fetchProjects();
-}, [isLoggedIn]); // Add isLoggedIn to the dependency array to run the effect when it changes
+}, [isLoggedIn, token]); // Add isLoggedIn to the dependency array to run the effect when it changes
 
 
-  const handleLogin = async (email) => {
-    setIsLoggedIn(email);
+const handleLogin = async (email, password) => {
+  setIsLoggedIn(email);
+  try {
+    const response = await fetch('http://localhost:3000/login', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ email, password }), // Include the user's email and password
+    });
+
+    const data = await response.json();
+
+    // Check if the response contains a token
+    if (data.token) {
+      // Set the token in your component state or use a state management solution (e.g., Redux)
+      setToken(data.token);
+      console.log(data.token);
+      setIsLoggedIn(email);
+      console.log("should print the token")
+    } else {
+      console.error('Login failed:', data.error);
+    }
+  } catch (error) {
+    console.error('Error during login:', error);
+  }
+};
+
+
+  const signOut = () => {
+    setIsLoggedIn('');
   }
 
   const toggleCreateProject = () => {
@@ -75,10 +106,11 @@ export default function App() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`, 
         },
         body: JSON.stringify({
           ...formValues,
-          email: "Ethan.e.gutierrez@gmail.com", // Assuming isLoggedIn is an array
+          email: isLoggedIn, // Assuming isLoggedIn is an array
         }),
       });
   
@@ -97,6 +129,7 @@ export default function App() {
         });
         toggleCreateProject();
       } else {
+        setAuthorizationMessage(true);
         console.error('Failed to create project:', response.statusText);
       }
     } catch (error) {
@@ -106,12 +139,13 @@ export default function App() {
   
   const fetchProjects = async () => {
     try {
-      const userEmail = 'Ethan.e.gutierrez@gmail.com';
+      const userEmail = isLoggedIn;
   
       const response = await fetch('http://localhost:3000', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
         },
         body: JSON.stringify({ email: userEmail }),
       });
@@ -130,6 +164,9 @@ export default function App() {
       console.log(project)
       const response = await fetch(`http://localhost:3000/projects/${project.id}`, {
         method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
   
       if (response.ok) {
@@ -149,7 +186,7 @@ export default function App() {
     <>
       <LoginPage handleLoginProp={handleLogin} />
       <SignupPage />
-      <Nav isLoggedIn={isLoggedIn}/>
+      <Nav signOut={signOut} isLoggedIn={isLoggedIn} />
       <div className="w-full h-full flex items-center bg-white">
         <SideBar
           projects={projects}
@@ -199,6 +236,9 @@ export default function App() {
               >
                 Cancel
               </button>
+              {showAuthorizationMessage ? (
+                <p className="text-red-500">You must log in for this feature.</p>
+              ) : null}
             </div>
           </form>
         </div>
