@@ -64,6 +64,7 @@ app.post('/createUser', async (req, res) => {
 app.post('/login', async (req, res) => {
     try {
         const { email, password } = req.body;
+        console.log(email, password)
 
         if (!email || !password) {
             return res.status(400).json({ error: 'Email and password are required' });
@@ -86,8 +87,6 @@ app.post('/login', async (req, res) => {
         res.status(500).json({ error: 'Internal Server Error' });
     }
 });
-
-app.update
 
 app.post('/projects', async (req, res) => {
     try {

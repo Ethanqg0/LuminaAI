@@ -7,7 +7,7 @@ import LoginPage from './components/LoginPage.jsx';
 import SignupPage from './components/SignupPage.jsx';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState(["Ethan.e.gutierrez@gmail.com"]);
+  const [isLoggedIn, setIsLoggedIn] = useState('');
   const [creatingProject, setCreatingProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
@@ -18,29 +18,36 @@ export default function App() {
     date: "", 
     tasks: []
   });
+  
 
   useEffect(() => {
     const fetchProjects = async () => {
-      try {
-        const userEmail = 'Ethan.e.gutierrez@gmail.com'; // Placeholder, will be using emailState later.
+        try {
+            // Use the actual value of isLoggedIn, not an object { isLoggedIn }
+            const userEmail = isLoggedIn;
 
-        const response = await fetch('http://localhost:3000', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ email: userEmail }),
-        });
+            const response = await fetch('http://localhost:3000', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ email: userEmail }),
+            });
 
-        const data = await response.json();
-        setProjects(data);
-      } catch (error) {
-        console.error('Error fetching projects:', error);
-      }
+            const data = await response.json();
+            setProjects(data);
+        } catch (error) {
+            console.error('Error fetching projects:', error);
+        }
     };
 
     fetchProjects();
-  }, []);
+}, [isLoggedIn]); // Add isLoggedIn to the dependency array to run the effect when it changes
+
+
+  const handleLogin = async (email) => {
+    setIsLoggedIn(email);
+  }
 
   const toggleCreateProject = () => {
     setCreatingProject(!creatingProject);
@@ -140,7 +147,7 @@ export default function App() {
 
   return (
     <>
-      <LoginPage />
+      <LoginPage handleLoginProp={handleLogin} />
       <SignupPage />
       <Nav isLoggedIn={isLoggedIn}/>
       <div className="w-full h-full flex items-center bg-white">
@@ -159,7 +166,7 @@ export default function App() {
               placeholder="Project Title"
               value={formValues.title}
               onChange={handleFormChange}
-              className="p-2 border rounded w-1/2"
+              className="p-2 border rounded w-1/2 bg-stone-200 focus:bg-stone-100 border-b-2 border-stone-300"
             />
             <input
               type="text"
@@ -167,7 +174,7 @@ export default function App() {
               placeholder="Project Description"
               value={formValues.description}
               onChange={handleFormChange}
-              className="p-2 border rounded w-1/2"
+              className="p-2 border rounded w-1/2 bg-stone-200 focus:bg-stone-100 border-b-2 border-stone-300"
             />
             <input
               type="text"
@@ -175,13 +182,13 @@ export default function App() {
               placeholder="Project Date"
               value={formValues.date}
               onChange={handleFormChange}
-              className="p-2 border rounded w-1/6"
+              className="p-2 border rounded w-1/6 bg-stone-200 focus:bg-stone-100 border-b-2 border-stone-300"
             />
             <div>
               <button
                 type="submit"
                 onClick={handleFormSubmit}
-                className="px-4 py-2 text-xs rounded-md bg-stone-700 text-stone-400 hover:bg-stone-600 cursor-pointer"
+                className="px-4 py-2 text-xs rounded-md bg-stone-700 text-stone-400 hover:bg-stone-600 cursor-pointer border-b-2 border-stone-300"
               >
                 Create Project
               </button>

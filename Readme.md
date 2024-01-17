@@ -1,0 +1,1 @@
+Authentication: Utilizing SupabaseAuth and Authentication tokens
