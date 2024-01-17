@@ -1,6 +1,7 @@
 import logo from '../assets/Logo.png'
+import { useState } from 'react';
 
-export default function Nav() {
+export default function Nav({isLoggedIn}) {
     return (
         <div className="w-full h-16 bg-black flex flex-row justify-between items-center">
             <div id="logo">
@@ -10,7 +11,14 @@ export default function Nav() {
                 <ul className="flex flex-row mr-20">
                     <li className="mr-4 text-white hover:text-blue-400 cursor-pointer">Home</li>
                     <li className="mr-4 text-white hover:text-blue-400 cursor-pointer">Projects</li>
-                    <li className="mr-4 text-white hover:text-blue-400 cursor-pointer">Settings</li>
+                    {isLoggedIn ? (
+                        <li className="mr-4 text-white hover:text-blue-400 cursor-pointer">Logout</li>
+                        ) : (
+                            <li className="mr-4 text-white hover:text-blue-400 cursor-pointer">Login</li>
+                            )}
+                    {isLoggedIn && (
+                        <li className="mr-4 text-white hover:text-blue-400 cursor-pointer">Settings</li>
+                    )}
                 </ul>
             </div>
         </div>

@@ -1,10 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import './index.css';
 import Nav from './components/Nav.jsx';
 import Project from './components/Project.jsx';
 import SideBar from './components/SideBar.jsx';
 
 export default function App() {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [creatingProject, setCreatingProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
@@ -15,6 +16,20 @@ export default function App() {
     date: "", 
     tasks: []
   });
+
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const response = await fetch('http://localhost:3000');
+        const data = await response.json();
+        setProjects(data); // Update the projects state with the fetched data
+      } catch (error) {
+        console.error('Error fetching projects:', error);
+      }
+    };
+
+    fetchProjects();
+  }, []);
 
   const toggleCreateProject = () => {
     setCreatingProject(!creatingProject);
@@ -61,7 +76,7 @@ export default function App() {
 
   return (
     <>
-      <Nav />
+      <Nav isLoggedIn={isLoggedIn}/>
       <div className="w-full h-full flex items-center bg-white">
         <SideBar
           projects={projects}
