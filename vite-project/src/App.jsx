@@ -21,7 +21,6 @@ export default function App() {
     tasks: []
   });
   
-
   useEffect(() => {
     const fetchProjects = async () => {
         try {
@@ -38,6 +37,7 @@ export default function App() {
 
             const data = await response.json();
             setProjects(data);
+            console.log(data)
         } catch (error) {
             console.error('Error fetching projects:', error);
         }
@@ -89,7 +89,7 @@ const handleLogin = async (email, password) => {
   }
 
   const handleProjectSelect = (project) => {
-    setSelectedProject({ ...project, id: project.id });
+    setSelectedProject({ ...project, id: project.id, tasks: project.tasks });
     console.log(project.description);
   }  
 
@@ -251,6 +251,8 @@ const handleLogin = async (email, password) => {
               description={selectedProject.description}
               date={selectedProject.date}
               tasks={selectedProject.tasks}
+              token={token}
+              setToken={setToken}
             />
             ) : (
               <div className="h-1/6 flex flex-col items-center justify-between">

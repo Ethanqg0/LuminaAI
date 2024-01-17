@@ -124,6 +124,30 @@ app.post('/login', async (req, res) => {
   }
 });
 
+app.get('/projects/:id', verifyToken, async (req, res) => {
+    try {
+      const projectId = req.params.id;
+  
+      const { data, error } = await supabase
+        .from('Project')
+        .select()
+        .eq('id', projectId);
+  
+      if (error) {
+        console.error('Supabase error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
+      } else {
+        if (data && data.length > 0) {
+          res.status(200).json(data[0]);
+        } else {
+          res.status(404).json({ error: 'Project not found' });
+        }
+      }
+    } catch (error) {
+      console.error('Unexpected error:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+});
 
 app.post('/projects', verifyToken, async (req, res) => {
     try {
@@ -179,7 +203,8 @@ app.put('/projects/:id', verifyToken, async (req, res) => {
       const { data, error } = await supabase
         .from('Project')
         .update({ "tasks": tasks })
-        .eq('id', projectId);
+        .eq('id', projectId)
+        .select();
   
       if (error) {
         console.error('Error updating project:', error);

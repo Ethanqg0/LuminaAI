@@ -1,51 +1,60 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Task from './Task.jsx';
 
 export default function Project(props) {
-  const [taskList, setTaskList] = useState(props.tasks || []);
+  const [taskList, setTaskList] = useState([]);
   const [newTask, setNewTask] = useState('');
+  const [loading, setLoading] = useState(true);
 
+  const fetchTasks = async () => {
+    try {
+      const response = await fetch(`http://localhost:3000/projects/${props.id}`, {
+        headers: {
+          'Authorization': `Bearer ${props.token}`,
+        },
+      });
+      const data = await response.json();
+      setTaskList(data.tasks);
+      setLoading(false); // Set loading to false once data is fetched
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+      setLoading(false); // Set loading to false in case of an error
+    }
+  }
+  
+  useEffect(() => {
+    fetchTasks();
+  }, [props.token, props.id, props.title]);
+
+  // adds task to the task list, and updates the database, and resets the input field
   const handleAddTask = async () => {
-    console.log(props.id)
-    // Add new task to the task list
-    setTaskList([...taskList, newTask]);
-
-    // Clear the task input
-    setNewTask('');
-
-    // Send a request to update tasks in the backend
+    const updatedTaskList = [...taskList, newTask];
     try {
       await fetch(`http://localhost:3000/projects/${props.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${props.token}`,
         },
-        body: JSON.stringify({ tasks: [...taskList, newTask] }),
+        body: JSON.stringify({ tasks: updatedTaskList }),
       });
     } catch (error) {
       console.error('Error updating tasks:', error);
-      // Handle error as needed
     }
+    setTaskList(updatedTaskList);
+    setNewTask('');
   };
 
+  // removes task from the task list, and updates the database
   const handleRemoveTask = async (taskToRemove) => {
-    if (!props.id) {
-      console.error('Project ID is undefined');
-      // Handle this case, perhaps show a user-friendly message
-      return;
-    }
-  
-    // Remove the specified task from the task list
     const updatedTaskList = taskList.filter((task) => task !== taskToRemove);
-    setTaskList(updatedTaskList);
-  
-    // Send a request to update tasks in the backend
     try {
       await fetch(`http://localhost:3000/projects/${props.id}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
+          'Authorization': `Bearer ${props.token}`,
         },
         body: JSON.stringify({ tasks: updatedTaskList }),
       });
@@ -53,13 +62,16 @@ export default function Project(props) {
       console.error('Error updating tasks:', error);
       // Handle error as needed
     }
+    setTaskList(updatedTaskList);
+    console.log(updatedTaskList)
   };
 
-  const tasks = taskList.map((task) => (
-    <Task key={task} task={task} onRemove={() => handleRemoveTask(task)} />
+  const tasks = taskList.map((task, index) => (
+    <Task key={index} task={task} onRemove={() => handleRemoveTask(task)} />
   ));
-
+  
   return (
+    (loading) ? ( "Loading..." ): (
     <div className="p-8 w-2/3 flex flex-row justify-center">
       <div className="flex flex-col">
         <h1 className="text-3xl font-bold mb-2">{props.title}</h1>
@@ -75,17 +87,17 @@ export default function Project(props) {
           onChange={(e) => setNewTask(e.target.value)}
           className="border rounded p-2 focus:outline-none focus:border-blue-500 border-black focus:ring focus:ring-blue-200"
         />
-        <button onClick={handleAddTask}>Add Task</button>
-        {tasks}
+        <button type="button" onClick={handleAddTask}>Add Task</button>
       </div>
-    </div>
+    </div>)
   );
 }
 
 Project.propTypes = {
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   tasks: PropTypes.array,
+  token: PropTypes.string, // Assuming you have a token prop for authorization
 };
