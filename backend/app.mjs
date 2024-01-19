@@ -149,28 +149,29 @@ app.get('/projects/:id', verifyToken, async (req, res) => {
     }
 });
 
-app.get('/projects', verifyToken, async (req, res) => {
-  try {
+app.post('/projects', verifyToken, async (req, res) => {
+    try {
       const { data, error } = await supabase
-          .from('Project')
-          .select()
-          .eq('email', req.query.email); // Assuming email is passed as a query parameter
-
+        .from('Project')
+        .insert([
+          { title: req.body.title, description: req.body.description, email: req.body.email, date: req.body.date, tasks: req.body.tasks },
+        ])
+        .select();
+  
       if (error) {
-          // Handle the error
-          console.error('Supabase error:', error);
-          res.status(500).json({ error: 'Internal Server Error' });
+        // Handle the error
+        console.error('Supabase error:', error);
+        res.status(500).json({ error: 'Internal Server Error' });
       } else {
-          // Return the projects for the specified email
-          res.status(200).json(data);
+        // Return the created project
+        res.status(201).json(data);
       }
-  } catch (error) {
+    } catch (error) {
       // Handle unexpected errors
       console.error('Unexpected error:', error);
       res.status(500).json({ error: 'Internal Server Error' });
-  }
+    }
 });
-
 
 app.delete('/projects/:id', verifyToken, async (req, res) => {
     try {

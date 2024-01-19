@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useAuth } from '../contexts/AuthContext.jsx';
+import { useNavigate } from 'react-router-dom';
 
 export default function LoginPage() {
   const { handleLogin } = useAuth();
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     email: '',
@@ -19,9 +21,9 @@ export default function LoginPage() {
         email: '',
         password: '',
       });
+      navigate('/home')
     } catch (error) {
       console.error('Error during login:', error);
-      // Handle login error (display an error message, etc.)
     }
   };
 

@@ -4,15 +4,14 @@ import Footer from './components/Footer.jsx';
 import Nav from './components/Nav2.jsx';
 import Project from './components/Project.jsx';
 import SideBar from './components/SideBar.jsx';
-import { useAuth } from './contexts/AuthContext.jsx';
+import { AuthContextProvider, useAuth } from './contexts/AuthContext.jsx';
 
 export default function App() {
-  const { isLoggedIn, token, handleLogin, signOut } = useAuth();
+  const { isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut } = useAuth();
 
   const [creatingProject, setCreatingProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
-  const [showAuthorizationMessage, setAuthorizationMessage] = useState(false);
 
   const [formValues, setFormValues] = useState({
     title: "",
@@ -94,7 +93,6 @@ export default function App() {
         });
         toggleCreateProject();
       } else {
-        setAuthorizationMessage(true);
         console.error('Failed to create project:', response.statusText);
       }
     } catch (error) {
@@ -200,9 +198,6 @@ export default function App() {
               >
                 Cancel
               </button>
-              {showAuthorizationMessage ? (
-                <p className="text-red-500">You must log in for this feature.</p>
-              ) : null}
             </div>
           </form>
         </div>
