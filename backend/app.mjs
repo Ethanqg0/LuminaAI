@@ -9,9 +9,13 @@ const supabaseKey = process.env.SUPABASE_KEY;
 const authSecretKey = process.env.AUTH_SECRET_KEY; // Use the correct environment variable
 
 const supabase = createClient(supabaseUrl, supabaseKey);
-
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: 'http://localhost:5173', // specify the origin
+  credentials: true, // allow credentials
+}));
+
 app.use(express.json());
 
 function generateAuthToken(userId) {
@@ -30,17 +34,14 @@ function verifyAuthToken(token) {
     return null;
   }
 }
-
-const verifyToken = (req, res, next) => {
+ const verifyToken = (req, res, next) => {
   const token = req.header('Authorization');
-  
   if (!token) {
     return res.status(401).json({ error: 'Unauthorized - No token provided' });
   }
 
   try {
     const decoded = jwt.verify(token.replace('Bearer ', ''), authSecretKey);
-    req.user = decoded;
     next();
   } catch (error) {
     return res.status(401).json({ error: 'Unauthorized - Invalid token' });
@@ -104,10 +105,12 @@ app.post('/login', async (req, res) => {
           return res.status(400).json({ error: 'Email and password are required' });
       }
 
+      console.log('Login', req.body)
       const { data, error } = await supabase.auth.signInWithPassword({
           email,
           password,
       });
+      console.log('Supabase response:', data, error);
 
       if (error) {
           console.error(error);
@@ -195,6 +198,14 @@ app.delete('/projects/:id', verifyToken, async (req, res) => {
     }
   });
 
+app.get('/verify-auth', verifyToken, (req, res) => {
+  if (req.session.user) {
+    res.status(200).json({ valid: true });
+  } else {
+    res.status(401).json({ valid: false });
+  }
+});
+
 app.put('/projects/:id', verifyToken, async (req, res) => {
     const projectId = req.params.id;
     const tasks = req.body.tasks;
@@ -229,6 +240,7 @@ app.listen(port, () => {
     console.log(`Running on http://localhost:${port}`);
 });
 
+/*
 import OpenAI from "openai";
 const openai = new OpenAI();
 
@@ -244,3 +256,4 @@ async function main() {
   console.log(completion.choices[0]);
 }
 main();
+*/

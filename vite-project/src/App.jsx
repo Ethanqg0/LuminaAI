@@ -5,6 +5,7 @@ import Nav from './components/Nav2.jsx';
 import Project from './components/Project.jsx';
 import SideBar from './components/SideBar.jsx';
 import { AuthContextProvider, useAuth } from './contexts/AuthContext.jsx';
+import { AES, enc } from 'crypto-js';
 
 export default function App() {
   const { isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut } = useAuth();
@@ -13,36 +14,64 @@ export default function App() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
 
+  const encryptionKey = "hi"
+
   const [formValues, setFormValues] = useState({
     title: "",
     description: "",
     date: "", 
     tasks: []
   });
-  
+
   useEffect(() => {
     const fetchProjects = async () => {
-        try {
-            const userEmail = isLoggedIn;
-
-            const response = await fetch('http://localhost:3000', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify({ email: userEmail }),
-            });
-
-            const data = await response.json();
-            setProjects(data);
-            console.log(data)
-        } catch (error) {
-            console.error('Error fetching projects:', error);
+      try {
+        const userEmail = isLoggedIn;
+    
+        const storedProjects = localStorage.getItem('projects');
+        const storedEmail = localStorage.getItem('email');
+    
+        // Check if projects are already in local storage
+        if (storedProjects && storedEmail) {
+          // Decrypt and parse the data from localStorage
+          const decryptedProjects = AES.decrypt(storedProjects, encryptionKey).toString(enc.Utf8);
+          const decryptedEmail = AES.decrypt(storedEmail, encryptionKey).toString(enc.Utf8);
+    
+          let parsedProjects = JSON.parse(decryptedProjects);
+          if (!Array.isArray(parsedProjects)) {
+            parsedProjects = [parsedProjects];
+          }
+          const parsedEmail = JSON.parse(decryptedEmail);
+    
+          setProjects(parsedProjects);
+          setIsLoggedIn(parsedEmail);
+        } else {
+          // If not in local storage, fetch projects from the server
+          const response = await fetch('http://localhost:3000', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ email: userEmail }),
+          });
+    
+          const data = await response.json();
+          setProjects(data);
+    
+          // Encrypt and store the newly fetched data
+          const encryptedProjects = AES.encrypt(JSON.stringify(data), encryptionKey).toString();
+          const encryptedEmail = AES.encrypt(JSON.stringify(userEmail), encryptionKey).toString();
+          localStorage.setItem('projects', encryptedProjects);
+          localStorage.setItem('email', encryptedEmail);
         }
+      } catch (error) {
+        console.error('Error fetching or setting projects:', error);
+      }
     };
-
-    fetchProjects();
-}, [isLoggedIn, token]);
+    
+    fetchProjects(); // Fetch projects when component mounts
+  }, [isLoggedIn, token]);
 
   const toggleCreateProject = () => {
     setCreatingProject(!creatingProject);
