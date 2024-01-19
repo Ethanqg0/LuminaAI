@@ -4,14 +4,14 @@ import Footer from './components/Footer.jsx';
 import Nav from './components/Nav2.jsx';
 import Project from './components/Project.jsx';
 import SideBar from './components/SideBar.jsx';
-import LoginPage from './components/LoginPage.jsx';
+import { useAuth } from './contexts/AuthContext.jsx';
 
 export default function App() {
-  const [isLoggedIn, setIsLoggedIn] = useState('');
+  const { isLoggedIn, token, handleLogin, signOut } = useAuth();
+
   const [creatingProject, setCreatingProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
-  const [token, setToken] = useState(null);
   const [showAuthorizationMessage, setAuthorizationMessage] = useState(false);
 
   const [formValues, setFormValues] = useState({
@@ -24,7 +24,6 @@ export default function App() {
   useEffect(() => {
     const fetchProjects = async () => {
         try {
-            // Use the actual value of isLoggedIn, not an object { isLoggedIn }
             const userEmail = isLoggedIn;
 
             const response = await fetch('http://localhost:3000', {
@@ -44,41 +43,7 @@ export default function App() {
     };
 
     fetchProjects();
-}, [isLoggedIn, token]); // Add isLoggedIn to the dependency array to run the effect when it changes
-
-
-const handleLogin = async (email, password) => {
-  setIsLoggedIn(email);
-  try {
-    const response = await fetch('http://localhost:3000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }), // Include the user's email and password
-    });
-
-    const data = await response.json();
-
-    // Check if the response contains a token
-    if (data.token) {
-      // Set the token in your component state or use a state management solution (e.g., Redux)
-      setToken(data.token);
-      console.log(data.token);
-      setIsLoggedIn(email);
-      console.log("should print the token")
-    } else {
-      console.error('Login failed:', data.error);
-    }
-  } catch (error) {
-    console.error('Error during login:', error);
-  }
-};
-
-
-  const signOut = () => {
-    setIsLoggedIn('');
-  }
+}, [isLoggedIn, token]);
 
   const toggleCreateProject = () => {
     setCreatingProject(!creatingProject);
@@ -184,7 +149,6 @@ const handleLogin = async (email, password) => {
 
   return (
     <>
-      <LoginPage handleLoginProp={handleLogin} />
       <Nav signOut={signOut} isLoggedIn={isLoggedIn} />
       <div className="w-full h-full flex items-center bg-white">
         <SideBar
