@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import LoginPage from './components/LoginPage.jsx';
 import App from './App.jsx';
 import { AuthContextProvider, useAuth } from './contexts/AuthContext.jsx';
+import LandingPage from './components/LandingPage.jsx';
 
 const AppRoutes = () => {
     const { token, setToken } = useAuth();
 
     return (
         <Routes>
+            <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/home" element={token ? <App /> : <Navigate to="/login" />} />
         </Routes>

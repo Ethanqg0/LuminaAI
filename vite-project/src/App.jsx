@@ -6,6 +6,7 @@ import Project from './components/Project.jsx';
 import SideBar from './components/SideBar.jsx';
 import { AuthContextProvider, useAuth } from './contexts/AuthContext.jsx';
 import { AES, enc } from 'crypto-js';
+import EmptyState from './components/EmptyState.jsx';
 
 export default function App() {
   const { isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut } = useAuth();
@@ -243,12 +244,7 @@ export default function App() {
               setToken={setToken}
             />
             ) : (
-              <div className="h-1/6 flex flex-col items-center justify-between">
-                <h1 className="text-3xl font-bold text-stone-700">
-                Welcome to Project Manager, {isLoggedIn}!
-                </h1>
-                <p>No selected project. Please select a project.</p>
-              </div>
+              <EmptyState />
             )}
           </div>
         )}
