@@ -1,10 +1,11 @@
 import PropTypes from 'prop-types';
+import checkmark from '../assets/checkmark.png';
 
 export default function Task(props) {
     return (
-        <div>
-            <h1>Task: {props.task}</h1>
-            <button onClick={props.onRemove} className="bg-red-400 p-2 text-sm rounded-md">Remove Task</button>
+        <div className="flex flex-row">
+            <h1 className="ml-2 text-lg">{props.task}</h1>
+            <img src={checkmark} onClick={props.onRemove} className="w-4 h-4 mt-1 ml-4 hover:bg-green-500 transition-all duration-300 ease-in-out"></img>
         </div>
     );
 }

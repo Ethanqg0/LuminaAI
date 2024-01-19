@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react';
 import './index.css';
-import Nav from './components/Nav.jsx';
+import Footer from './components/Footer.jsx';
+import Nav from './components/Nav2.jsx';
 import Project from './components/Project.jsx';
 import SideBar from './components/SideBar.jsx';
 import LoginPage from './components/LoginPage.jsx';
-import SignupPage from './components/SignupPage.jsx';
 
 export default function App() {
   const [isLoggedIn, setIsLoggedIn] = useState('');
@@ -192,6 +192,7 @@ const handleLogin = async (email, password) => {
           toggleCreateProject={toggleCreateProject}
           handleProjectSelect={handleProjectSelect}
           handleDeleteProject={handleDeleteProject}
+          selectedProject={selectedProject}
         />
         {creatingProject ? (
           <div className="w-3/4 p-8">
@@ -263,6 +264,9 @@ const handleLogin = async (email, password) => {
             )}
           </div>
         )}
+      </div>
+      <div className="mt-20">
+        <Footer />
       </div>
     </>
     );

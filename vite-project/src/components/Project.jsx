@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import Task from './Task.jsx';
+import plusPhoto from '../assets/plus.png';
 
 export default function Project(props) {
   const [taskList, setTaskList] = useState([]);
@@ -71,23 +72,35 @@ export default function Project(props) {
   ));
   
   return (
-    <div className="p-8 w-2/3 flex flex-row justify-center">
-      <div className="flex flex-col">
-        <h1 className="text-3xl font-bold">{props.title}</h1>
-        <h1 className="text-xl text-stone-600 mb-8">Due Date: {props.date}</h1>
-        <h1 className="text-xl mb-2">Description: {props.description}</h1>
-        <label htmlFor="task" className="block text-lg mb-1">
-          Add Task:
-        </label>
-        <input
-          type="text"
-          id="task"
-          value={newTask}
-          onChange={(e) => setNewTask(e.target.value)}
-          className="border rounded p-2 focus:outline-none focus:border-blue-500 border-black focus:ring focus:ring-blue-200"
-        />
-        <button type="button" onClick={handleAddTask}>Add Task</button>
-        {tasks}
+    <div className="p-8 w-2/3 h-4/5 flex flex-row active:">
+      <div className="flex w-full flex-col justify-around">
+        <div className="w-full">
+          <h1 className="text-4xl font-bold mb-2">{props.title}</h1>
+          <h1 className="text-lg text-stone-600 mb-8">Due Date: {props.date}</h1>
+          <h1 className="text-lg text-stone-800 mb-2 font"><span className="font-bold">Description:</span> {props.description}</h1>
+        </div>
+        <div className="flex flex-row items-center w-full">
+          <label htmlFor="task" className="block text-lg mb-1 mr-4">
+            Add Task:
+          </label>
+          <input
+            type="text"
+            id="task"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            className="border rounded p-1 focus:outline-none focus:border-blue-500 border-black focus:ring focus:ring-blue-200 w-1/2"
+          />
+          <img src={plusPhoto} onClick={handleAddTask} className="w-8 ml-4"></img>
+        </div>
+        <div className="w-full h-1/3 overflow-auto border p-4 shadow-md">
+          <ul className="">
+            {tasks.map((task, index) => (
+              <li key={index} className="mb-2 no-underline flex flex-row">
+                {task}
+              </li>
+            ))}
+          </ul>
+        </div>
       </div>
     </div>
   );
