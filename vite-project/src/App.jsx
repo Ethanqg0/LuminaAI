@@ -24,55 +24,90 @@ export default function App() {
     tasks: []
   });
 
+  const handleDeleteProject = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/projects/${id}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+
+      if (response.ok) {
+        const updatedProjects = projects.filter((p) => p.id !== id);
+        setProjects(updatedProjects);
+        setSelectedProject(null);
+      } else {
+        console.error('Failed to delete project:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error deleting project:', error);
+    }
+  };
+  
+  const handleFormSubmit = async (event) => {
+    event.preventDefault();
+
+    try {
+      const response = await fetch('http://localhost:3000/projects', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          ...formValues,
+          email: isLoggedIn,
+        }),
+      });
+
+      if (response.ok) {
+        const newProject = await response.json();
+        setProjects(prevProjects => [...prevProjects, newProject]);
+
+        setFormValues({
+          title: '',
+          description: '',
+          date: '',
+          tasks: [],
+        });
+        toggleCreateProject();
+      } else {
+        console.error('Failed to create project:', response.statusText);
+      }
+    } catch (error) {
+      console.error('Error creating project:', error);
+    }
+  };
+
+  // After login, set email to isLoggedIn and localStorage to isLoggedIn. If the page is refreshed, isLoggedIn will be undefined, so we need to check localStorage for the email.
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const userEmail = isLoggedIn;
-    
-        const storedProjects = localStorage.getItem('projects');
-        const storedEmail = localStorage.getItem('email');
-    
-        // Check if projects are already in local storage
-        if (storedProjects && storedEmail) {
-          // Decrypt and parse the data from localStorage
-          const decryptedProjects = AES.decrypt(storedProjects, encryptionKey).toString(enc.Utf8);
-          const decryptedEmail = AES.decrypt(storedEmail, encryptionKey).toString(enc.Utf8);
-    
-          let parsedProjects = JSON.parse(decryptedProjects);
-          if (!Array.isArray(parsedProjects)) {
-            parsedProjects = [parsedProjects];
-          }
-          const parsedEmail = JSON.parse(decryptedEmail);
-    
-          setProjects(parsedProjects);
-          setIsLoggedIn(parsedEmail);
-        } else {
-          // If not in local storage, fetch projects from the server
-          const response = await fetch('http://localhost:3000', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${token}`,
-            },
-            body: JSON.stringify({ email: userEmail }),
-          });
-    
-          const data = await response.json();
-          setProjects(data);
-    
-          // Encrypt and store the newly fetched data
-          const encryptedProjects = AES.encrypt(JSON.stringify(data), encryptionKey).toString();
-          const encryptedEmail = AES.encrypt(JSON.stringify(userEmail), encryptionKey).toString();
-          localStorage.setItem('projects', encryptedProjects);
-          localStorage.setItem('email', encryptedEmail);
-        }
+        let userEmail = localStorage.getItem('email');
+        setIsLoggedIn(userEmail);
+
+        console.log(userEmail)
+  
+        const response = await fetch('http://localhost:3000', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ email: userEmail }),
+        });
+  
+        const data = await response.json();
+        setProjects(data);
       } catch (error) {
-        console.error('Error fetching or setting projects:', error);
+        console.log('Error fetching projects:', error)
       }
     };
-    
-    fetchProjects(); // Fetch projects when component mounts
-  }, [isLoggedIn, token]);
+  
+    fetchProjects();
+  }, [isLoggedIn, projects.length]); // Add isLoggedIn as a dependency
+  
 
   const toggleCreateProject = () => {
     setCreatingProject(!creatingProject);
@@ -91,89 +126,6 @@ export default function App() {
     const { name, value } = event.target;
     setFormValues({ ...formValues, [name]: value });
   }
-
-  const handleFormSubmit = async (event) => {
-    event.preventDefault();
-  
-    try {
-      const response = await fetch('http://localhost:3000/projects', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`, 
-        },
-        body: JSON.stringify({
-          ...formValues,
-          email: isLoggedIn, // Assuming isLoggedIn is an array
-        }),
-      });
-  
-      if (response.ok) {
-        // Call fetchProjects and await its completion
-        const updatedProjectsData = await fetchProjects();
-        
-        // Update the state with the new list of projects
-        setProjects(updatedProjectsData);
-  
-        setFormValues({
-          title: '',
-          description: '',
-          date: '',
-          tasks: [],
-        });
-        toggleCreateProject();
-      } else {
-        console.error('Failed to create project:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error creating project:', error);
-    }
-  };
-  
-  const fetchProjects = async () => {
-    try {
-      const userEmail = isLoggedIn;
-  
-      const response = await fetch('http://localhost:3000', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify({ email: userEmail }),
-      });
-  
-      const data = await response.json();
-      return data; // Return the fetched projects data
-    } catch (error) {
-      console.error('Error fetching projects:', error);
-      return []; // Return an empty array or handle errors accordingly
-    }
-  };
-  
-
-  const handleDeleteProject = async (project) => {
-    try {
-      console.log(project)
-      const response = await fetch(`http://localhost:3000/projects/${project.id}`, {
-        method: 'DELETE',
-        headers: {
-          'Authorization': `Bearer ${token}`
-        }
-      });
-  
-      if (response.ok) {
-        const updatedProjects = projects.filter((p) => p.id !== project.id);
-        setProjects(updatedProjects);
-        setSelectedProject(null);
-      } else {
-        console.error('Failed to delete project:', response.statusText);
-      }
-    } catch (error) {
-      console.error('Error deleting project:', error);
-    }
-  };
-  
 
   return (
     <>
@@ -242,6 +194,7 @@ export default function App() {
               tasks={selectedProject.tasks}
               token={token}
               setToken={setToken}
+              handleDeleteProject={handleDeleteProject}
             />
             ) : (
               <EmptyState />
@@ -249,7 +202,7 @@ export default function App() {
           </div>
         )}
       </div>
-      <div className="mt-20">
+      <div className="mt-0">
         <Footer />
       </div>
     </>

@@ -72,7 +72,7 @@ export default function Project(props) {
   ));
   
   return (
-    <div className="p-8 w-2/3 h-4/5 flex flex-row active:">
+    <div className="p-8 w-2/3 h-4/5 flex flex-row">
       <div className="flex w-full flex-col justify-around">
         <div className="w-full">
           <h1 className="text-4xl font-bold mb-2">{props.title}</h1>
@@ -101,6 +101,9 @@ export default function Project(props) {
             ))}
           </ul>
         </div>
+        <div className="">
+          <button className="rounded-md bg-black px-6 py-2 text-sm font-semibold text-white shadow-s hover:bg-red-600 hover:text-black transition-colors duration-300" onClick={() => props.handleDeleteProject(props.id)}>Delete</button>
+        </div>
       </div>
     </div>
   );
@@ -113,4 +116,5 @@ Project.propTypes = {
   description: PropTypes.string.isRequired,
   tasks: PropTypes.array,
   token: PropTypes.string, // Assuming you have a token prop for authorization
+  handleDeleteProject: PropTypes.func.isRequired,
 };

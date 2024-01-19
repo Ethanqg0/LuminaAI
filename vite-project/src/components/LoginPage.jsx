@@ -21,7 +21,7 @@ export default function LoginPage() {
         email: '',
         password: '',
       });
-      navigate('/home')
+      navigate('/dashboard')
     } catch (error) {
       console.error('Error during login:', error);
     }

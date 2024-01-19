@@ -130,7 +130,7 @@ export default function Example() {
   const navigate = useNavigate();
 
   const handleLoginClick = () => {
-    navigate('/home');
+    navigate('/dashboard');
   };
 
   return (

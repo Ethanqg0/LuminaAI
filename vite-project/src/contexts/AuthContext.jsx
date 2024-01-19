@@ -31,7 +31,7 @@ export const AuthContextProvider = ({ children }) => {
       if (data.token) {
         setToken(data.token);
         sessionStorage.setItem('token', data.token);
-        localStorage.setItem('authToken', data.token);
+        localStorage.setItem('email', email);
       }
     } catch (error) {
       console.error('Failed to login:', error);

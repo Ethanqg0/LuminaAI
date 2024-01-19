@@ -12,7 +12,7 @@ const AppRoutes = () => {
         <Routes>
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
-            <Route path="/home" element={token ? <App /> : <Navigate to="/login" />} />
+            <Route path="/dashboard" element={token ? <App /> : <Navigate to="/login" />} />
         </Routes>
     );
 };
