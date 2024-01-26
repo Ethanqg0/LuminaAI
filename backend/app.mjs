@@ -4,9 +4,9 @@ import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 
-const supabaseUrl = process.env.SUPABASE_URL;
-const supabaseKey = process.env.SUPABASE_KEY;
-const authSecretKey = process.env.AUTH_SECRET_KEY; // Use the correct environment variable
+const supabaseUrl = "https://nuvsntxbvstdamigwdvm.supabase.co";
+const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51dnNudHhidnN0ZGFtaWd3ZHZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU0ODM1OTcsImV4cCI6MjAyMTA1OTU5N30.TwCGeHdRfKTyZDWTW9mLvYmobr09jTN9wkOIY0DQlgM";
+const authSecretKey =  "hi"; // Use the correct environment variable
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
@@ -18,46 +18,59 @@ app.use(cors({
 
 app.use(express.json());
 
-function generateAuthToken(userId) {
-  const expiresIn = '1h';
-  const token = jwt.sign({ userId }, authSecretKey, { expiresIn }); // Use authSecretKey
-  return token;
+import bcrypt from 'bcryptjs';
+
+const { sign, verify } = jwt;
+const { compare } = bcrypt;
+
+const KEY = 'supersecret';
+
+function createJSONToken(email) {
+  return sign({ email }, KEY, { expiresIn: '1h' });
 }
 
-function verifyAuthToken(token) {
-  try {
-    const decoded = jwt.verify(token, authSecretKey); // Use authSecretKey
-    return decoded;
-  } catch (error) {
-    // Token verification failed
-    console.error('Token verification failed:', error.message);
-    return null;
-  }
+function validateJSONToken(token) {
+  return verify(token, KEY);
 }
- const verifyToken = (req, res, next) => {
-  const token = req.header('Authorization');
-  if (!token) {
-    return res.status(401).json({ error: 'Unauthorized - No token provided' });
-  }
 
+function isValidPassword(password, storedPassword) {
+  return compare(password, storedPassword);
+}
+
+function checkAuthMiddleware(req, res, next) {
+  if (req.method === 'OPTIONS') {
+    return next();
+  }
+  if (!req.headers.authorization) {
+    console.log('NOT AUTH. AUTH HEADER MISSING.');
+    return next(new NotAuthError('Not authenticated.'));
+  }
+  const authFragments = req.headers.authorization.split(' ');
+
+  if (authFragments.length !== 2) {
+    console.log('NOT AUTH. AUTH HEADER INVALID.');
+    return next(new NotAuthError('Not authenticated.'));
+  }
+  const authToken = authFragments[1];
   try {
-    const decoded = jwt.verify(token.replace('Bearer ', ''), authSecretKey);
-    next();
+    const validatedToken = validateJSONToken(authToken);
+    req.token = validatedToken;
   } catch (error) {
-    return res.status(401).json({ error: 'Unauthorized - Invalid token' });
+    console.log('NOT AUTH. TOKEN INVALID.');
+    return next(new NotAuthError('Not authenticated.'));
   }
-};
+  next();
+}
 
-app.post('/', async (req, res) => {
+app.post('/', checkAuthMiddleware, async (req, res) => {
   try {
-      // Retrieve the email from the request body
-      const emailParam = req.body.email;
+      const email = req.body.email;
 
       // Fetch data from the 'Project' table using the email parameter
       const { data: projects, error } = await supabase
           .from('Project')
           .select('*')
-          .eq('email', emailParam);
+          .eq('email', email);
 
       if (error) {
           console.log("error");
@@ -71,6 +84,7 @@ app.post('/', async (req, res) => {
   }
 });
 
+// Not done with yet.
 app.post('/createUser', async (req, res) => {
     try {
         const { email, password } = req.body;
@@ -118,7 +132,7 @@ app.post('/login', async (req, res) => {
       }
 
       // Generate a token
-      const token = generateAuthToken(data.user.id);
+      const token = createJSONToken(email);
 
       res.status(200).json({ success: 'Login successful', user: data.user, token });
   } catch (error) {
@@ -127,7 +141,7 @@ app.post('/login', async (req, res) => {
   }
 });
 
-app.get('/projects/:id', verifyToken, async (req, res) => {
+app.get('/projects/:id', checkAuthMiddleware, async (req, res) => {
     try {
       const projectId = req.params.id;
   
@@ -152,7 +166,7 @@ app.get('/projects/:id', verifyToken, async (req, res) => {
     }
 });
 
-app.post('/projects', verifyToken, async (req, res) => {
+app.post('/projects', checkAuthMiddleware, async (req, res) => {
     try {
       const { data, error } = await supabase
         .from('Project')
@@ -176,7 +190,8 @@ app.post('/projects', verifyToken, async (req, res) => {
     }
 });
 
-app.delete('/projects/:id', verifyToken, async (req, res) => {
+// works, just make sure you can only delete your own post.
+app.delete('/projects/:id', checkAuthMiddleware, async (req, res) => {
     try {
       const projectId = req.params.id;
       console.log(projectId)
@@ -198,15 +213,17 @@ app.delete('/projects/:id', verifyToken, async (req, res) => {
     }
   });
 
-app.get('/verify-auth', verifyToken, (req, res) => {
-  if (req.session.user) {
-    res.status(200).json({ valid: true });
-  } else {
-    res.status(401).json({ valid: false });
-  }
+app.get('/verify-auth', (req, res) => {
+    checkAuthMiddleware(req, res, (error) => {
+      if (error) {
+        res.status(401).json({ error: 'Not authenticated' });
+      } else {
+        res.status(200).json({ message: 'Authenticated' });
+      }
+    })
 });
 
-app.put('/projects/:id', verifyToken, async (req, res) => {
+app.put('/projects/:id', checkAuthMiddleware, async (req, res) => {
     const projectId = req.params.id;
     const tasks = req.body.tasks;
   
@@ -239,21 +256,3 @@ const port = 3000;
 app.listen(port, () => {
     console.log(`Running on http://localhost:${port}`);
 });
-
-/*
-import OpenAI from "openai";
-const openai = new OpenAI();
-
-async function main() {
-  const completion = await openai.chat.completions.create({
-    messages: [{"role": "system", "content": "You are a helpful assistant."},
-        {"role": "user", "content": "Who won the world series in 2020?"},
-        {"role": "assistant", "content": "The Los Angeles Dodgers won the World Series in 2020."},
-        {"role": "user", "content": "Where was it played?"}],
-    model: "gpt-3.5-turbo",
-  });
-
-  console.log(completion.choices[0]);
-}
-main();
-*/

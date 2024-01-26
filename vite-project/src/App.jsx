@@ -5,7 +5,6 @@ import Nav from './components/Nav2.jsx';
 import Project from './components/Project.jsx';
 import SideBar from './components/SideBar.jsx';
 import { AuthContextProvider, useAuth } from './contexts/AuthContext.jsx';
-import { AES, enc } from 'crypto-js';
 import EmptyState from './components/EmptyState.jsx';
 
 export default function App() {
@@ -14,8 +13,6 @@ export default function App() {
   const [creatingProject, setCreatingProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
-
-  const encryptionKey = "hi"
 
   const [formValues, setFormValues] = useState({
     title: "",

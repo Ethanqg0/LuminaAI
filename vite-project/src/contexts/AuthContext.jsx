@@ -4,10 +4,10 @@ const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
   const [isLoggedIn, setIsLoggedIn] = useState('');
-  const [token, setToken] = useState(sessionStorage.getItem('token') || null);
+  const [token, setToken] = useState(localStorage.getItem('token') || null);
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token');
+    const token = localStorage.getItem('token');
     if (token) {
       setToken(token);
       setIsLoggedIn(); // set to user email
@@ -30,7 +30,7 @@ export const AuthContextProvider = ({ children }) => {
       // Check if the response contains a token
       if (data.token) {
         setToken(data.token);
-        sessionStorage.setItem('token', data.token);
+        localStorage.setItem('token', data.token);
         localStorage.setItem('email', email);
       }
     } catch (error) {

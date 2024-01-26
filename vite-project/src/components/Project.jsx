@@ -7,6 +7,7 @@ export default function Project(props) {
   const [taskList, setTaskList] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [loading, setLoading] = useState(true);
+  
 
   const fetchTasks = async () => {
     try {
@@ -83,7 +84,7 @@ export default function Project(props) {
           <label htmlFor="task" className="block text-lg mb-1 mr-4">
             Add Task:
           </label>
-          <input
+          <textarea
             type="text"
             id="task"
             value={newTask}
