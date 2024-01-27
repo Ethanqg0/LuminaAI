@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
+import { redirect } from 'react-router-dom';
 
 const AuthContext = createContext();
 
@@ -39,8 +40,9 @@ export const AuthContextProvider = ({ children }) => {
   };
 
     const signOut = () => {
-        setIsLoggedIn('');
-        setToken(null);
+      setIsLoggedIn('');
+      setToken(null);
+      redirect('/')
     };
 
 

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import Nav from './Nav2';
+import Nav from './Nav';
 import { AuthContextProvider, useAuth } from '../contexts/AuthContext.jsx';
 import collapseUp from '../assets/collapseup.svg';
 import collapseDown from '../assets/collapsedown.svg';
@@ -7,6 +7,7 @@ import collapseDown from '../assets/collapsedown.svg';
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
   const { isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut } = useAuth();
+
 
   const fetchProjects = async () => {
     try {
@@ -67,26 +68,16 @@ export default function Dashboard() {
       return dateB - dateA;
     });
   
-    console.log("Ordered Projects", orderedProjects);
-  
     // Second, if the date is past the current date, remove it from the list
     const currentDate = new Date();
-    console.log("Current Date", currentDate);
   
     const filteredProjects = orderedProjects.filter((project) => {
         const projectDate = new Date(project.date);
         const midnightCurrentDate = new Date(currentDate);
         midnightCurrentDate.setHours(0, 0, 0, 0);
       
-        console.log("Project Due Date:", project.date);
-        console.log("Converted Project Date:", projectDate);
-        console.log("Midnight Current Date:", midnightCurrentDate);
-        console.log("Comparison Result:", projectDate.getTime() >= midnightCurrentDate.getTime());
-      
         return projectDate.getTime() >= midnightCurrentDate.getTime();
       });
-      
-    console.log("Filtered Projects", filteredProjects);
   
     return filteredProjects;
   };
@@ -114,7 +105,7 @@ export default function Dashboard() {
   const renderProjects = (projectList) => {
     return projectList.map((project) => (
       <div key={project.id} className="flex flex-col w-full">
-        <div className="pt-4 pb-4 flex flex-row hover:bg-gray-200 w-full">
+        <div className="pt-4 pb-4 flex flex-row hover:bg-neutral-100 bg-neutral-50 w-full">
           <h1 className="ml-6">{project.title}:</h1>
           <h1 className="ml-2">{project.date}</h1>
         </div>
@@ -133,7 +124,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <Nav />
+      <Nav signOut={signOut}/>
       <div className="mt-20 flex flex-col items-center">
         <div className=" w-1/2 justify-start">
           <h1 className="text-2xl font-semibold">Hello, <span>{isLoggedIn}!</span></h1>

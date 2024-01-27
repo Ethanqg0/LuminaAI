@@ -11,13 +11,15 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { CheckIcon } from '@heroicons/react/20/solid'
+import Bulb from '../assets/bulb.png';
 
 const navigation = [
-  { name: 'Product', href: '#' },
-  { name: 'Features', href: '#' },
-  { name: 'Marketplace', href: '#' },
-  { name: 'Company', href: '#' },
+  { name: '', href: '#' },
+  { name: '', href: '#' },
+  { name: '', href: '#' },
+  { name: '', href: '#' },
 ]
+
 const features = [
   {
     name: 'Push to deploy',
@@ -143,7 +145,7 @@ export default function Example() {
               <span className="sr-only">Your Company</span>
               <img
                 className="h-8 w-auto"
-                src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                src={Bulb}
                 alt=""
               />
             </a>

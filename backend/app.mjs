@@ -3,10 +3,10 @@ import express from 'express';
 import { createClient } from '@supabase/supabase-js';
 import 'dotenv/config';
 import jwt from 'jsonwebtoken';
+import bcrypt from 'bcryptjs';
 
 const supabaseUrl = "https://nuvsntxbvstdamigwdvm.supabase.co";
 const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51dnNudHhidnN0ZGFtaWd3ZHZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU0ODM1OTcsImV4cCI6MjAyMTA1OTU5N30.TwCGeHdRfKTyZDWTW9mLvYmobr09jTN9wkOIY0DQlgM";
-const authSecretKey =  "hi"; // Use the correct environment variable
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
@@ -18,15 +18,13 @@ app.use(cors({
 
 app.use(express.json());
 
-import bcrypt from 'bcryptjs';
-
 const { sign, verify } = jwt;
 const { compare } = bcrypt;
 
 const KEY = 'supersecret';
 
 function createJSONToken(email) {
-  return sign({ email }, KEY, { expiresIn: '1h' });
+  return sign({ email }, KEY);
 }
 
 function validateJSONToken(token) {

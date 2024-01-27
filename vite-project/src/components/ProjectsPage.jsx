@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import '../index.css';
 import Footer from './Footer.jsx';
-import Nav from './Nav2.jsx';
+import Nav from './Nav.jsx';
 import Project from './Project.jsx';
 import SideBar from './SideBar.jsx';
 import { AuthContextProvider, useAuth } from '../contexts/AuthContext.jsx';
