@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Nav from './Nav2';
 import { AuthContextProvider, useAuth } from '../contexts/AuthContext.jsx';
+import collapseUp from '../assets/collapseup.svg';
+import collapseDown from '../assets/collapsedown.svg';
 
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
@@ -111,10 +113,10 @@ export default function Dashboard() {
   
   const renderProjects = (projectList) => {
     return projectList.map((project) => (
-      <div key={project.id} className="flex flex-col">
-        <div className="mt-2">
-          <h1>{project.title}</h1>
-          <h1>{project.date}</h1>
+      <div key={project.id} className="flex flex-col w-full">
+        <div className="pt-4 pb-4 flex flex-row hover:bg-gray-200 w-full">
+          <h1 className="ml-6">{project.title}:</h1>
+          <h1 className="ml-2">{project.date}</h1>
         </div>
       </div>
     ));
@@ -137,29 +139,38 @@ export default function Dashboard() {
           <h1 className="text-2xl font-semibold">Hello, <span>{isLoggedIn}!</span></h1>
         </div>
 
-        <div onClick={() => toggleSection('recentProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100 p-2">
-          <div className="flex flex-row">
-            <h1>Open Icon</h1>
-            <h1 className="ml-4">Last Used Projects</h1>
+        <div onClick={() => toggleSection('recentProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100">
+          <div className="flex flex-row p-4">
+            <img src={sectionStates.recentProjects ? collapseUp : collapseDown}></img>
+            <h1 className="ml-4 poppins text-xl">Recent Projects</h1>
+            <div className="ml-2 bg-green-400 w-8 rounded-full flex justify-center items-center"><h1>{recentProjects.length}</h1></div>
           </div>
-          {sectionStates.recentProjects && <div>{recentProjects}</div>}
+          {sectionStates.recentProjects && <div className="mt-2 border-t-2 border-gray-200">{recentProjects}</div>}
         </div>
 
-        <div onClick={() => toggleSection('upcomingProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100 p-2">
-          <div className="flex flex-row">
-            <h1>Open Icon</h1>
-            <h1 className="ml-4">Upcoming Projects</h1>
+        <div onClick={() => toggleSection('upcomingProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100">
+          <div className="flex flex-row p-4">
+            <img src={sectionStates.upcomingProjects ? collapseUp : collapseDown}></img>
+            <h1 className="ml-4 poppins text-xl">Upcoming Projects</h1>
+            <div className="ml-2 bg-blue-400 w-8 rounded-full flex justify-center items-center"><h1>{upcomingProjects.length}</h1></div>
           </div>
-          {sectionStates.upcomingProjects && <div>{renderUpcomingProjects}</div>}
+          {sectionStates.upcomingProjects && <div className="mt-2 border-t-2 border-gray-200">{renderUpcomingProjects}</div>}
 
         </div>
 
-        <div onClick={() => toggleSection('dueProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100 p-2">
-          <div className="flex flex-row">
-            <h1>Open Icon</h1>
-            <h1 className="ml-4">Due Projects</h1>
+        <div onClick={() => toggleSection('dueProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100">
+          <div className="flex flex-row p-4">
+            <img src={sectionStates.dueProjects? collapseUp : collapseDown}></img>
+            <h1 className="ml-4 poppins text-xl">Due Projects</h1>
+            <div className="ml-2 bg-red-400 w-8 rounded-full flex justify-center items-center"><h1>{dueProjects.length}</h1></div>
           </div>
-            {sectionStates.dueProjects && <div>{renderDueProjects}</div>}
+          <div className="">
+            {sectionStates.dueProjects && <div className="mt-2 border-t-2 border-gray-200">{renderDueProjects}</div>}
+          </div>
+        </div>
+
+        <div className="mt-20">
+            TODO: Completed Projects Here
         </div>
       </div>
     </>

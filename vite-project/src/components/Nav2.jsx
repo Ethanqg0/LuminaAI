@@ -18,7 +18,7 @@ export default function Example() {
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
                   <img
-                    className="h-44 mt-1 w-auto"
+                    className="mt-1 h-56 w-auto"
                     src={LuminaLogo}
                     alt="Your Company"
                   />

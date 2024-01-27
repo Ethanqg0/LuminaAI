@@ -19,7 +19,7 @@ const SideBar = ({ projects, toggleCreateProject, handleProjectSelect, selectedP
     <div className="w-1/5 rounded-b-lg h-full bg-white flex flex-col items-center border-r border-b border-gray-200 overflow-y-scroll">
       <span className='w-full border-b-2 flex flex-col justify-center items-center mt-6'>
         <SearchBar handleInputChange={handleInputChange}/>
-        <button onClick={toggleCreateProject} className="m-4 mb-6 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
+        <button onClick={toggleCreateProject} className="m-4 mt-6 mb-6 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600">
           <h1 className="text-white text-xs mb-"> + New Project</h1>
         </button>
       </span>
