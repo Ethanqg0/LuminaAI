@@ -1,18 +1,95 @@
 import { useState, useEffect } from 'react';
-import './index.css';
-import Footer from './components/Footer.jsx';
-import Nav from './components/Nav2.jsx';
-import Project from './components/Project.jsx';
-import SideBar from './components/SideBar.jsx';
-import { AuthContextProvider, useAuth } from './contexts/AuthContext.jsx';
-import EmptyState from './components/EmptyState.jsx';
+import '../index.css';
+import Footer from './Footer.jsx';
+import Nav from './Nav2.jsx';
+import Project from './Project.jsx';
+import SideBar from './SideBar.jsx';
+import { AuthContextProvider, useAuth } from '../contexts/AuthContext.jsx';
+import EmptyState from './EmptyState.jsx';
 
-export default function App() {
+export default function ProjectsPage() {
   const { isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut } = useAuth();
 
   const [creatingProject, setCreatingProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
+
+    // After login, set email to isLoggedIn and localStorage to isLoggedIn. If the page is refreshed, isLoggedIn will be undefined, so we need to check localStorage for the email.
+    useEffect(() => {
+      const fetchProjects = async () => {
+        try {
+          let userEmail = localStorage.getItem('email');
+          setIsLoggedIn(userEmail);
+  
+          console.log(userEmail)
+    
+          const response = await fetch('http://localhost:3000', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${token}`,
+            },
+            body: JSON.stringify({ email: userEmail }),
+          });
+    
+          const data = await response.json();
+          setProjects(data);
+        } catch (error) {
+          console.log('Error fetching projects:', error)
+        }
+      };
+    
+      fetchProjects();
+    }, [isLoggedIn, projects.length]); // Add isLoggedIn as a dependency
+
+  
+  const handleAddTask = async () => {
+    const updatedTaskList = [...taskList, newTask];
+    try {
+      await fetch(`http://localhost:3000/projects/${props.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${props.token}`,
+        },
+        body: JSON.stringify({ tasks: updatedTaskList }),
+      });
+    } catch (error) {
+      console.error('Error updating tasks:', error);
+    }
+    setTaskList(updatedTaskList);
+    setNewTask('');
+  };
+  
+  const updateLastModified = async () => {
+    const timestampzone = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+    const timestamp = timestampzone.substring(0, timestampzone.length - 3);
+
+    return timestamp;
+  }
+
+  useEffect(() => {
+    // update the 'lastModified' property of the project when the project is selected to a timestamp with timezone
+    const updateProjectLastModified = async () => {
+      try {
+        const timestamp = await updateLastModified();
+        await fetch(`http://localhost:3000/projects/${selectedProject.id}/lastModified`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`,
+          },
+          body: JSON.stringify({ lastModified: timestamp }),
+        });
+      } catch (error) {
+        console.error('Error updating lastModified:', error);
+      }
+    };
+
+    if (selectedProject) {
+      updateProjectLastModified();
+    }
+  }, [selectedProject, token]);
 
   const [formValues, setFormValues] = useState({
     title: "",
@@ -75,36 +152,7 @@ export default function App() {
     } catch (error) {
       console.error('Error creating project:', error);
     }
-  };
-
-  // After login, set email to isLoggedIn and localStorage to isLoggedIn. If the page is refreshed, isLoggedIn will be undefined, so we need to check localStorage for the email.
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        let userEmail = localStorage.getItem('email');
-        setIsLoggedIn(userEmail);
-
-        console.log(userEmail)
-  
-        const response = await fetch('http://localhost:3000', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`,
-          },
-          body: JSON.stringify({ email: userEmail }),
-        });
-  
-        const data = await response.json();
-        setProjects(data);
-      } catch (error) {
-        console.log('Error fetching projects:', error)
-      }
-    };
-  
-    fetchProjects();
-  }, [isLoggedIn, projects.length]); // Add isLoggedIn as a dependency
-  
+  };  
 
   const toggleCreateProject = () => {
     setCreatingProject(!creatingProject);
@@ -155,7 +203,7 @@ export default function App() {
               className="p-2 border rounded w-1/2 bg-stone-200 focus:bg-stone-100 border-b-2 border-stone-300"
             />
             <input
-              type="text"
+              type="date"
               name="date"
               placeholder="Project Date"
               value={formValues.date}

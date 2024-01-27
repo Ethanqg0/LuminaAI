@@ -223,6 +223,33 @@ app.get('/verify-auth', (req, res) => {
     })
 });
 
+app.put('/projects/:id/lastModified', checkAuthMiddleware, async (req, res) => {
+    const projectId = req.params.id;
+    const lastModified = req.body.lastModified;
+
+    try {
+      const { data, error } = await supabase
+        .from('Project')
+        .update({ "lastModified": lastModified })
+        .eq('id', projectId)
+        .select();
+  
+      if (error) {
+        console.error('Error updating project:', error);
+        res.status(500).json({ error: 'Internal server error' });
+      } else {
+        if (data && data.length > 0) {
+          res.status(200).json({ message: 'Project updated successfully', updatedProject: data[0] });
+        } else {
+          res.status(404).json({ error: 'Project not found' });
+        }
+      }
+    } catch (error) {
+      console.error('Error updating project:', error);
+      res.status(500).json({ error: 'Internal server error' });
+    }
+})
+
 app.put('/projects/:id', checkAuthMiddleware, async (req, res) => {
     const projectId = req.params.id;
     const tasks = req.body.tasks;

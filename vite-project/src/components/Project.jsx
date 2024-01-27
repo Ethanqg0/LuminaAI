@@ -8,7 +8,6 @@ export default function Project(props) {
   const [newTask, setNewTask] = useState('');
   const [loading, setLoading] = useState(true);
   
-
   const fetchTasks = async () => {
     try {
       const response = await fetch(`http://localhost:3000/projects/${props.id}`, {
