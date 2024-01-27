@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom';
+import LuminaLogo from '../assets/Lumina.png';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -17,8 +18,8 @@ export default function Example() {
               <div className="flex">
                 <div className="flex flex-shrink-0 items-center">
                   <img
-                    className="h-8 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                    className="h-44 mt-1 w-auto"
+                    src={LuminaLogo}
                     alt="Your Company"
                   />
                 </div>
@@ -26,7 +27,7 @@ export default function Example() {
                   {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   <Link
                     to="/dashboard"
-                    className="inline-flex items-center  px-1 pt-1 text-sm font-medium "
+                    className="inline-flex items-center  px-1 text-sm font-medium "
                   >
                     Dashboard
                   </Link>
