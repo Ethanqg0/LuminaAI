@@ -35,6 +35,10 @@ export default function LoginPage() {
     });
   };
 
+  const handleSignupRedirect = () => {
+    navigate('/signup')
+  }
+
   return (
     <div className="flex items-center min-h-screen bg-white dark:bg-gray-900">
       <div className="container mx-auto">
@@ -75,9 +79,7 @@ export default function LoginPage() {
               <div className="mb-6">
                 <button type="submit" className="w-full px-3 py-4 text-white bg-indigo-500 rounded-md focus:bg-indigo-600 focus:outline-none">Sign in</button>
               </div>
-              {/* You can add a login error message here if needed */}
-              {/* <p className="text-sm text-center text-red-500">Login failed. Please try again.</p> */}
-              <p className="text-sm text-center text-gray-400">Don't have an account yet? <a href="#!" className="text-indigo-400 focus:outline-none focus:underline focus:text-indigo-500 dark:focus:border-indigo-800">Sign up</a>.</p>
+              <p onClick={handleSignupRedirect} onSubmit={handleSignupRedirect} className="text-sm text-center text-gray-400">Don't have an account yet? <a className="text-indigo-400 focus:outline-none focus:underline focus:text-indigo-500 dark:focus:border-indigo-800">Sign up</a>.</p>
             </form>
           </div>
         </div>

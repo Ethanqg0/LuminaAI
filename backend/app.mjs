@@ -85,9 +85,13 @@ app.post('/', checkAuthMiddleware, async (req, res) => {
 // Not done with yet.
 app.post('/createUser', async (req, res) => {
     try {
-        const { email, password } = req.body;
+        const { email, password, confirmedPassword} = req.body;
 
-        if (!email || !password) {
+        if (password !== confirmedPassword) {
+            return res.status(400).json({ error: 'Passwords do not match' });
+        }
+
+        if (!email || !password || !confirmedPassword) {
             return res.status(400).json({ error: 'Email and password are required' });
         }
 

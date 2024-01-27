@@ -3,7 +3,6 @@ import { Disclosure, Menu, Transition } from '@headlessui/react'
 import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom';
 import LuminaLogo from '../assets/Lumina.png';
-import { useState } from 'react';
 import headshot from '../assets/bulb.png';
 
 function classNames(...classes) {
@@ -57,7 +56,7 @@ export default function Nav({signOut}) {
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+              
                 </button>
 
                 {/* Profile dropdown */}
@@ -183,7 +182,7 @@ export default function Nav({signOut}) {
                 >
                   <span className="absolute -inset-1.5" />
                   <span className="sr-only">View notifications</span>
-                  <BellIcon className="h-6 w-6" aria-hidden="true" />
+               
                 </button>
               </div>
               <div className="mt-3 space-y-1">

@@ -144,7 +144,7 @@ export default function Example() {
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">Your Company</span>
               <img
-                className="h-8 w-auto"
+                className="h-16 w-auto"
                 src={Bulb}
                 alt=""
               />
@@ -168,7 +168,7 @@ export default function Example() {
             ))}
           </div>
           <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-            <a href="" onClick={handleLoginClick} className="text-sm font-semibold leading-6 text-gray-900">
+            <a href="" onClick={handleLoginClick} className="text-lg font-semibold leading-6 text-gray-900">
               Log in <span aria-hidden="true">&rarr;</span>
             </a>
           </div>

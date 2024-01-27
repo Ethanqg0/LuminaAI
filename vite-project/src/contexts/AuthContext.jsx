@@ -39,7 +39,26 @@ export const AuthContextProvider = ({ children }) => {
     }
   };
 
-    const signOut = () => {
+  const handleSignup = async (email, password, confirmedPassword) => {
+    try {
+      const response = await fetch('http://localhost:3000/createUser', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password, confirmedPassword }), // Include the user's email and password
+      })
+
+      const data = await response.json();
+      console.log(data)
+      
+    } catch (error) {
+      console.error('Failed to signup:', error);
+      return error;
+    }
+  }
+
+  const signOut = () => {
       setIsLoggedIn('');
       setToken(null);
       redirect('/')
@@ -47,7 +66,7 @@ export const AuthContextProvider = ({ children }) => {
 
 
   return (
-    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut }}>
+    <AuthContext.Provider value={{ isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, handleSignup, signOut }}>
       {children}
     </AuthContext.Provider>
   );

@@ -3,6 +3,10 @@ import Nav from './Nav';
 import { AuthContextProvider, useAuth } from '../contexts/AuthContext.jsx';
 import collapseUp from '../assets/collapseup.svg';
 import collapseDown from '../assets/collapsedown.svg';
+import Footer from './Footer.jsx';
+import Stats from './Stats.jsx';
+import Chart from './Chart.jsx';
+import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
@@ -39,6 +43,7 @@ export default function Dashboard() {
     recentProjects: false,
     upcomingProjects: false,
     dueProjects: false,
+    completedProjects: false,
   });
 
   const toggleSection = (section) => {
@@ -57,7 +62,6 @@ export default function Dashboard() {
   
     return orderedProjects;
   };
-  
 
   const orderProjectsByDueDate = (projects) => {
     // First, order projects by due date
@@ -104,12 +108,14 @@ export default function Dashboard() {
   
   const renderProjects = (projectList) => {
     return projectList.map((project) => (
+      <Link to={"/projects"}>
       <div key={project.id} className="flex flex-col w-full">
-        <div className="pt-4 pb-4 flex flex-row hover:bg-neutral-100 bg-neutral-50 w-full">
-          <h1 className="ml-6">{project.title}:</h1>
+        <div className="pt-4 pb-4 flex flex-col hover:bg-neutral-100 bg-neutral-50 w-full">
           <h1 className="ml-2">{project.date}</h1>
+          <h1 className="ml-2">{project.title}</h1>
         </div>
       </div>
+      </Link>
     ));
   };
 
@@ -123,47 +129,70 @@ export default function Dashboard() {
   const renderDueProjects = renderProjects(dueProjects);
 
   return (
-    <>
+    <div className="w-full h-full">
       <Nav signOut={signOut}/>
-      <div className="mt-20 flex flex-col items-center">
-        <div className=" w-1/2 justify-start">
-          <h1 className="text-2xl font-semibold">Hello, <span>{isLoggedIn}!</span></h1>
+      <div className="w-full flex flex-row h-full">
+        <div id="dashboardProjects" className="w-2/3 h-full border-b-2 bg-white">
+            <div className="mt-20 flex flex-col items-center">
+              <div className=" w-2/3 justify-start">
+                <h1 className="text-4xl poppins font-semibold">Welcome Back, Ethan! 💻 </h1>
+              </div>
+
+              <div onClick={() => toggleSection('recentProjects')} className="mt-10 w-2/3 flex flex-col justify-start bg-zinc-100">
+                <div className="flex flex-row p-4 border-t-4 border-green-500">
+                  <img src={sectionStates.recentProjects ? collapseUp : collapseDown} className="w-3"></img>
+                  <h1 className="ml-4 font-sans font-semibold text-xl">Recent Projects</h1>
+                  <div className="ml-2 bg-green-400 w-8 rounded-full flex justify-center items-center"><h1>{recentProjects.length}</h1></div>
+                </div>
+                {sectionStates.recentProjects && <div className="mt-2 border-t-2 border-gray-200">{recentProjects}</div>}
+              </div>
+
+              <div onClick={() => toggleSection('upcomingProjects')} className="mt-10 w-2/3 flex flex-col justify-start bg-zinc-100">
+                <div className="flex flex-row p-4 border-t-4 border-blue-500">
+                  <img src={sectionStates.upcomingProjects ? collapseUp : collapseDown} className="w-3"></img>
+                  <h1 className="ml-4 font-sans font-semibold text-xl">Upcoming Projects</h1>
+                  <div className="ml-2 bg-blue-400 w-8 rounded-full flex justify-center items-center"><h1>{upcomingProjects.length}</h1></div>
+                </div>
+                {sectionStates.upcomingProjects && <div className="mt-2 border-t-2 border-gray-200">{renderUpcomingProjects}</div>}
+
+              </div>
+
+              <div onClick={() => toggleSection('dueProjects')} className="mt-10 w-2/3 flex flex-col justify-start bg-zinc-100">
+                <div className="flex flex-row p-4 border-t-4 border-red-500">
+                  <img src={sectionStates.dueProjects? collapseUp : collapseDown} className="w-3"></img>
+                  <h1 className="ml-4 font-sans font-semibold text-xl">Due Projects</h1>
+                  <div className="ml-2 bg-red-400 w-8 rounded-full flex justify-center items-center"><h1>{dueProjects.length}</h1></div>
+                </div>
+                <div className="">
+                  {sectionStates.dueProjects && <div className="mt-2 border-t-2 border-gray-200">{renderDueProjects}</div>}
+                </div>
+              </div>
+
+              <div onClick={() => toggleSection('completedProjects')} className="mt-10 w-2/3 flex flex-col justify-start bg-zinc-100">
+                <div className="flex flex-row p-4 border-t-4 border-indigo-400">
+                  <img src={sectionStates.completedProjects? collapseUp : collapseDown} className="w-3"></img>
+                  <h1 className="ml-4 font-sans font-semibold text-xl">Completed Projects</h1>
+                  <div className="ml-2 bg-indigo-400 w-8 rounded-full flex justify-center items-center"><h1>{dueProjects.length}</h1></div>
+                </div>
+                <div className="">
+                  {sectionStates.dueProjects && <div className="mt-2 border-t-2 border-gray-200">{renderDueProjects}</div>}
+                </div>
+              </div>
+            </div>
+
         </div>
-
-        <div onClick={() => toggleSection('recentProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100">
-          <div className="flex flex-row p-4">
-            <img src={sectionStates.recentProjects ? collapseUp : collapseDown}></img>
-            <h1 className="ml-4 poppins text-xl">Recent Projects</h1>
-            <div className="ml-2 bg-green-400 w-8 rounded-full flex justify-center items-center"><h1>{recentProjects.length}</h1></div>
+        <div id="progressBar" className="w-1/2 flex flex-col items-center">
+          <div className="flex flex-col items-center justify-center w-full border-l-2 h-1/2 bg-neutral-50">
+            <h1 className="mt-8 text-xl poppins font-semibold">Active Tasks Completed</h1>
+            <Chart />
           </div>
-          {sectionStates.recentProjects && <div className="mt-2 border-t-2 border-gray-200">{recentProjects}</div>}
-        </div>
-
-        <div onClick={() => toggleSection('upcomingProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100">
-          <div className="flex flex-row p-4">
-            <img src={sectionStates.upcomingProjects ? collapseUp : collapseDown}></img>
-            <h1 className="ml-4 poppins text-xl">Upcoming Projects</h1>
-            <div className="ml-2 bg-blue-400 w-8 rounded-full flex justify-center items-center"><h1>{upcomingProjects.length}</h1></div>
+          <div className="flex items-center justify-center flex-col border-t-2  w-full border-l-2 bg-neutral-100 border-b-2 h-1/2">
+            <h1 className="mb-10 text-xl poppins font-semibold">Analytics</h1>
+            <Stats />
           </div>
-          {sectionStates.upcomingProjects && <div className="mt-2 border-t-2 border-gray-200">{renderUpcomingProjects}</div>}
-
-        </div>
-
-        <div onClick={() => toggleSection('dueProjects')} className="mt-10 w-1/2 flex flex-col justify-start bg-zinc-100">
-          <div className="flex flex-row p-4">
-            <img src={sectionStates.dueProjects? collapseUp : collapseDown}></img>
-            <h1 className="ml-4 poppins text-xl">Due Projects</h1>
-            <div className="ml-2 bg-red-400 w-8 rounded-full flex justify-center items-center"><h1>{dueProjects.length}</h1></div>
-          </div>
-          <div className="">
-            {sectionStates.dueProjects && <div className="mt-2 border-t-2 border-gray-200">{renderDueProjects}</div>}
-          </div>
-        </div>
-
-        <div className="mt-20">
-            TODO: Completed Projects Here
         </div>
       </div>
-    </>
+      <Footer />
+    </div>
   );
 }
