@@ -101,16 +101,38 @@ app.post('/createUser', async (req, res) => {
         });
 
         if (error) {
-            console.error(error);
             return res.status(500).json({ error: 'User creation failed' });
         }
 
         // Send a success response
         res.status(201).json({ success: 'User created successfully' });
     } catch (error) {
-        console.error(error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
+});
+
+app.post('/resendVerificationEmail', async (req, res) => {
+  try {
+      const email = req.body.email;
+
+      const { data, error } = await supabase.auth.resend({
+          type: 'signup',
+          email: email,
+          options: {
+              emailRedirectTo: 'http://localhost:5173/login'
+          }
+      });
+
+      if (error) {
+          throw new Error(error.message);
+      }
+
+      // Handle successful resend if needed
+      res.status(200).json({ message: 'Confirmation email resent successfully' });
+  } catch (error) {
+      console.error('Error resending confirmation email:', error.message);
+      res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 app.post('/login', async (req, res) => {

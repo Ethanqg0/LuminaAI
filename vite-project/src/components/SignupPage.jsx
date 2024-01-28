@@ -5,6 +5,7 @@ import { useAuth } from '../contexts/AuthContext.jsx';
 export default function SignupPage() {
     const navigate = useNavigate();
     const { handleSignup } = useAuth();
+    const [error, setError] = useState(null);
 
     const [formData, setFormData] = useState({
         email: '',
@@ -14,16 +15,15 @@ export default function SignupPage() {
 
     const handleSignupSubmit = async (e) => {
         e.preventDefault();
-    
+
         try {
-          await handleSignup(formData.email, formData.password, formData.confirmedPassword);
-          // Reset the form values
+          const response = await handleSignup(formData.email, formData.password, formData.confirmedPassword);
           setFormData({
             email: '',
             password: '',
             confirmedPassword: '',
           });
-          navigate('/login')
+          navigate('/confirmEmail')
         } catch (error) {
           console.error('Error during login:', error);
         }

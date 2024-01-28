@@ -72,7 +72,7 @@ export default function Project(props) {
   ));
   
   return (
-    <div className="p-8 w-2/3 flex flex-row">
+    <div className="p-8 w-2/3 h-full mt-20 flex flex-row">
       <div className="flex w-full flex-col justify-around">
         <div className="w-full">
           <h1 className="text-4xl font-bold mb-2">{props.title}</h1>

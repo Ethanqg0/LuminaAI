@@ -7,6 +7,7 @@ import { AuthContextProvider, useAuth } from './contexts/AuthContext.jsx';
 import LandingPage from './components/LandingPage.jsx';
 import Calendar from './components/Calendar.jsx';
 import SignupPage from './components/SignupPage.jsx';
+import ConfirmEmail from './components/ConfirmEmail.jsx';
 
 const AppRoutes = () => {
     const { token } = useAuth();
@@ -16,6 +17,7 @@ const AppRoutes = () => {
             <Route path="/" element={<LandingPage />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
+            <Route path="/confirmEmail" element={<ConfirmEmail />} />
             <Route path="/dashboard" element={token ? <Dashboard /> : <Navigate to="/login" />} />
             <Route path="/projects" element={token ? <ProjectsPage /> : <Navigate to="/login" />} />
             <Route path="/calendar" element={token ? <Calendar /> : <Navigate to="/login" />} />

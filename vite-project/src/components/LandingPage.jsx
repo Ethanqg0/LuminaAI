@@ -6,12 +6,15 @@ import {
   ArrowPathIcon,
   Bars3Icon,
   CloudArrowUpIcon,
+  Cog6ToothIcon,
   FingerPrintIcon,
   LockClosedIcon,
+  ServerIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { CheckIcon } from '@heroicons/react/20/solid'
 import Bulb from '../assets/bulb.png';
+import DashboardDemo from '../assets/Dashboard.png';
 
 const navigation = [
   { name: '', href: '#' },
@@ -22,27 +25,27 @@ const navigation = [
 
 const features = [
   {
-    name: 'Push to deploy',
+    name: 'AI Feedback',
     description:
-      'Morbi viverra dui mi arcu sed. Tellus semper adipiscing suspendisse semper morbi. Odio urna massa nunc massa.',
+      'LuminaAI provides real-time feedback on your project, allowing you to make the best decisions for your team.',
+    icon: Cog6ToothIcon,
+  },
+  {
+    name: 'Calendar integration',
+    description:
+      'LuminaAI integrates with your calendar, allowing you to schedule meetings and events with ease.',
     icon: CloudArrowUpIcon,
   },
   {
-    name: 'SSL certificates',
+    name: 'Advanced Analytics',
     description:
-      'Sit quis amet rutrum tellus ullamcorper ultricies libero dolor eget. Sem sodales gravida quam turpis enim lacus amet.',
-    icon: LockClosedIcon,
-  },
-  {
-    name: 'Simple queues',
-    description:
-      'Quisque est vel vulputate cursus. Risus proin diam nunc commodo. Lobortis auctor congue commodo diam neque.',
-    icon: ArrowPathIcon,
+      'LuminaAI provides advanced analytics on your project, allowing you to visualize your productivity and efficiency.',
+    icon: ServerIcon,
   },
   {
     name: 'Advanced security',
     description:
-      'Arcu egestas dolor vel iaculis in ipsum mauris. Tincidunt mattis aliquet hac quis. Id hac maecenas ac donec pharetra eget.',
+      'Our backend is secured with the latest encryption technology, ensuring that your data is safe and secure.',
     icon: FingerPrintIcon,
   },
 ]
@@ -90,10 +93,25 @@ const tiers = [
 const faqs = [
   {
     id: 1,
-    question: "What's the best thing about Switzerland?",
+    question: "What makes LuminaAI unique?",
     answer:
-      "I don't know, but the flag is a big plus. Lorem ipsum dolor sit amet consectetur adipisicing elit. Quas cupiditate laboriosam fugiat.",
+      "LuminaAI stands out with its AI-driven approach, delivering a streamlined project management experience with optimal efficiency and precision. It combines simplicity with high functionality, making it an ideal tool for project management.",
   },
+  {
+    id: 2,
+    question: "Is LuminaAI suitable for freelancers and larger enterprises alike?",
+    answer: "Yes, LuminaAI offers pricing plans for teams of all sizes. Whether you're a freelancer or part of a large enterprise, LuminaAI has plans tailored to meet your project management needs."
+  },
+  {
+    id: 3,
+    question: "How secure is LuminaAI?",
+    answer: "LuminaAI takes security seriously. Our backend is secured with the latest encryption technology, ensuring that your data is safe and secure."
+  },
+  {
+    id: 4,
+    question: "Does LuminaAI offer a trial period?",
+    answer: "Yes, LuminaAI offers a trial period for you to explore its features and capabilities. You can get started with the trial on our website.",
+  }
   // More questions...
 ]
 const footerNavigation = {
@@ -260,7 +278,7 @@ export default function Example() {
               <div className="mt-16 flow-root sm:mt-24">
                 <div className="-m-2 rounded-xl bg-gray-900/5 p-2 ring-1 ring-inset ring-gray-900/10 lg:-m-4 lg:rounded-2xl lg:p-4">
                   <img
-                    src="https://tailwindui.com/img/component-images/project-app-screenshot.png" // main phtoo on hero here
+                    src={DashboardDemo} // main phtoo on hero here
                     alt="App screenshot"
                     width={2432}
                     height={1442}
@@ -323,29 +341,17 @@ export default function Example() {
               height={48}
             />
           </div>
-          <div className="mt-16 flex justify-center">
-            <p className="relative rounded-full px-4 py-1.5 text-sm leading-6 text-gray-600 ring-1 ring-inset ring-gray-900/10 hover:ring-gray-900/20">
-              <span className="hidden md:inline">
-                Transistor saves up to $40,000 per year, per employee by working with us.
-              </span>
-              <a href="#" className="font-semibold text-indigo-600">
-                <span className="absolute inset-0" aria-hidden="true" /> Read our case study{' '}
-                <span aria-hidden="true">&rarr;</span>
-              </a>
-            </p>
-          </div>
         </div>
 
         {/* Feature section */}
         <div className="mx-auto mt-32 max-w-7xl px-6 sm:mt-56 lg:px-8">
           <div className="mx-auto max-w-2xl lg:text-center">
-            <h2 className="text-base font-semibold leading-7 text-indigo-600">Deploy faster</h2>
+            <h2 className="text-base font-semibold leading-7 text-indigo-600">Simple and effortless.</h2>
             <p className="mt-2 text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-              Everything you need to deploy your app
+              Everything you need for project management and more.
             </p>
             <p className="mt-6 text-lg leading-8 text-gray-600">
-              Quis tellus eget adipiscing convallis sit sit eget aliquet quis. Suspendisse eget egestas a elementum
-              pulvinar et feugiat blandit at. In mi viverra elit nunc.
+              Utilizing a simple UI with high functionality, LuminaAI is the perfect tool for project management.
             </p>
           </div>
           <div className="mx-auto mt-16 max-w-2xl sm:mt-20 lg:mt-24 lg:max-w-4xl">
@@ -400,14 +406,12 @@ export default function Example() {
               <figure>
                 <blockquote className="mt-6 text-lg font-semibold text-white sm:text-xl sm:leading-8">
                   <p>
-                    “Amet amet eget scelerisque tellus sit neque faucibus non eleifend. Integer eu praesent at a. Ornare
-                    arcu gravida natoque erat et cursus tortor consequat at. Vulputate gravida sociis enim nullam
-                    ultricies habitant malesuada lorem ac.”
+                    "”
                   </p>
                 </blockquote>
                 <figcaption className="mt-6 text-base text-white">
                   <div className="font-semibold">Judith Black</div>
-                  <div className="mt-1">CEO of Tuple</div>
+                  <div className="mt-1">CEO of _</div>
                 </figcaption>
               </figure>
             </div>
@@ -522,19 +526,12 @@ export default function Example() {
               <br />
               Start using our app today.
             </h2>
-            <p className="mx-auto mt-6 max-w-xl text-lg leading-8 text-gray-600">
-              Incididunt sint fugiat pariatur cupidatat consectetur sit cillum anim id veniam aliqua proident excepteur
-              commodo do ea.
-            </p>
             <div className="mt-10 flex items-center justify-center gap-x-6">
               <a
                 href="#"
                 className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
               >
                 Get started
-              </a>
-              <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
-                Learn more <span aria-hidden="true">→</span>
               </a>
             </div>
           </div>
@@ -552,79 +549,6 @@ export default function Example() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <div className="mx-auto mt-32 max-w-7xl px-6 lg:px-8">
-        <footer
-          aria-labelledby="footer-heading"
-          className="relative border-t border-gray-900/10 py-24 sm:mt-56 sm:py-32"
-        >
-          <h2 id="footer-heading" className="sr-only">
-            Footer
-          </h2>
-          <div className="xl:grid xl:grid-cols-3 xl:gap-8">
-            <img
-              className="h-7"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-              alt="Company name"
-            />
-            <div className="mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0">
-              <div className="md:grid md:grid-cols-2 md:gap-8">
-                <div>
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Solutions</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.solutions.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Support</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.support.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-              <div className="md:grid md:grid-cols-2 md:gap-8">
-                <div>
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Company</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.company.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-                <div className="mt-10 md:mt-0">
-                  <h3 className="text-sm font-semibold leading-6 text-gray-900">Legal</h3>
-                  <ul role="list" className="mt-6 space-y-4">
-                    {footerNavigation.legal.map((item) => (
-                      <li key={item.name}>
-                        <a href={item.href} className="text-sm leading-6 text-gray-600 hover:text-gray-900">
-                          {item.name}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              </div>
-            </div>
-          </div>
-        </footer>
-      </div>
     </div>
   )
 }

@@ -51,7 +51,13 @@ export const AuthContextProvider = ({ children }) => {
 
       const data = await response.json();
       console.log(data)
-      
+
+      setIsLoggedIn(email);
+      setToken(data.token);
+      localStorage.setItem('token', data.token);
+      localStorage.setItem('email', email);
+
+      return data;
     } catch (error) {
       console.error('Failed to signup:', error);
       return error;
@@ -60,6 +66,8 @@ export const AuthContextProvider = ({ children }) => {
 
   const signOut = () => {
       setIsLoggedIn('');
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
       setToken(null);
       redirect('/')
     };
