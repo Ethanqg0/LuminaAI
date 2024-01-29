@@ -9,9 +9,14 @@ export const AuthContextProvider = ({ children }) => {
 
   useEffect(() => {
     const token = localStorage.getItem('token');
+    const email = localStorage.getItem('email');
+
     if (token) {
       setToken(token);
-      setIsLoggedIn(); // set to user email
+    }
+
+    if (email) {
+      setIsLoggedIn(email);
     }
   }, []);
 

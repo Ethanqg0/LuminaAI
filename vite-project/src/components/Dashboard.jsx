@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Nav from './Nav';
-import { AuthContextProvider, useAuth } from '../contexts/AuthContext.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import collapseUp from '../assets/collapseup.svg';
 import collapseDown from '../assets/collapsedown.svg';
 import Footer from './Footer.jsx';
@@ -11,7 +11,6 @@ import { Link } from 'react-router-dom';
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
   const { isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut } = useAuth();
-
 
   const fetchProjects = async () => {
     try {
@@ -128,6 +127,23 @@ export default function Dashboard() {
   const dueProjects = fetchDueProjects(projects);
   const renderDueProjects = renderProjects(dueProjects);
 
+
+  const getBackgroundColor = (value) => {
+    if (value < 25) {
+      return 'red';
+    } else if (value < 50) {
+      return 'gold';
+    } else if (value < 75) {
+      return 'green';
+    } else {
+      return '#006400';
+    }
+  };
+  
+  let value = 90;
+  const backgroundColorTest = getBackgroundColor(value);
+  
+
   return (
     <div className="w-full h-full">
       <Nav signOut={signOut}/>
@@ -183,8 +199,11 @@ export default function Dashboard() {
         </div>
         <div id="progressBar" className="w-1/2 flex flex-col items-center">
           <div className="flex flex-col items-center justify-center w-full border-l-2 h-1/2 bg-neutral-50">
-            <h1 className="mt-8 text-xl poppins font-semibold">Active Tasks Completed</h1>
-            <Chart />
+            <h1 className="text-xl poppins font-semibold mb-6">Active Projects</h1>
+            <Chart title={"Project(s) Progress"} value={40} backgroundColor={getBackgroundColor(40)}/>
+            <Chart title={"Milestones Met"} value={20} backgroundColor={getBackgroundColor(20)}/>
+            <Chart title={"Task Completion"} value={value} backgroundColor={getBackgroundColor(value)}/>
+            <Chart title={"Task Duration"} value={70} backgroundColor={getBackgroundColor(70)}/>
           </div>
           <div className="flex items-center justify-center flex-col border-t-2  w-full border-l-2 bg-neutral-100 border-b-2 h-1/2">
             <h1 className="mb-10 text-xl poppins font-semibold">Analytics</h1>

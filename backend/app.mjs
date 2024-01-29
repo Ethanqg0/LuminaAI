@@ -5,15 +5,15 @@ import 'dotenv/config';
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 
-const supabaseUrl = "https://nuvsntxbvstdamigwdvm.supabase.co";
-const supabaseKey = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im51dnNudHhidnN0ZGFtaWd3ZHZtIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDU0ODM1OTcsImV4cCI6MjAyMTA1OTU5N30.TwCGeHdRfKTyZDWTW9mLvYmobr09jTN9wkOIY0DQlgM";
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseKey = process.env.SUPABASE_KEY;
 
 const supabase = createClient(supabaseUrl, supabaseKey);
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:5173', // specify the origin
-  credentials: true, // allow credentials
+  origin: process.env.ROUTE, // add your route here
+  credentials: true,
 }));
 
 app.use(express.json());

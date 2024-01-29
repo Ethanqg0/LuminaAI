@@ -1,0 +1,27 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+* {
+    font-family: 'Roboto', sans-serif;
+}
+
+@keyframes loadBar {
+    0% {
+      width: 0%;
+    }
+    100% {
+      width: 100%;
+    }
+  }
+  
+  .loader {
+    border: black 2px solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 30px;
+    line-height: 20px;
+    color: black;
+    animation-name: loadBar;
+    animation-duration: 2s;
+    border-radius: 0.375rem;
+}
