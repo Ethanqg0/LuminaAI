@@ -1,4 +1,3 @@
-import React from 'react';
 import Nav from './Nav.jsx';
 
 import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid'

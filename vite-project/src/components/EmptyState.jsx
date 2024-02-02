@@ -1,5 +1,3 @@
-import { PlusIcon } from '@heroicons/react/20/solid'
-
 export default function EmptyState() {
   return (
     <div className="text-center">

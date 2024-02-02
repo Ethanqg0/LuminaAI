@@ -6,7 +6,6 @@ import plusPhoto from '../assets/plus.png';
 export default function Project(props) {
   const [taskList, setTaskList] = useState([]);
   const [newTask, setNewTask] = useState('');
-  const [loading, setLoading] = useState(true);
   
   const fetchTasks = async () => {
     try {
@@ -17,10 +16,8 @@ export default function Project(props) {
       });
       const data = await response.json();
       setTaskList(data.tasks);
-      setLoading(false); // Set loading to false once data is fetched
     } catch (error) {
       console.error('Error fetching tasks:', error);
-      setLoading(false); // Set loading to false in case of an error
     }
   }
   

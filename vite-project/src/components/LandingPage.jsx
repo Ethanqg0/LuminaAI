@@ -1,14 +1,11 @@
 import { useState } from 'react'
-import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Dialog } from '@headlessui/react'
 import {
-  ArrowPathIcon,
   Bars3Icon,
   CloudArrowUpIcon,
   Cog6ToothIcon,
   FingerPrintIcon,
-  LockClosedIcon,
   ServerIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
@@ -112,34 +109,7 @@ const faqs = [
     question: "Does LuminaAI offer a trial period?",
     answer: "Yes, LuminaAI offers a trial period for you to explore its features and capabilities. You can get started with the trial on our website.",
   }
-  // More questions...
 ]
-const footerNavigation = {
-  solutions: [
-    { name: 'Hosting', href: '#' },
-    { name: 'Data Services', href: '#' },
-    { name: 'Uptime Monitoring', href: '#' },
-    { name: 'Enterprise Services', href: '#' },
-  ],
-  support: [
-    { name: 'Pricing', href: '#' },
-    { name: 'Documentation', href: '#' },
-    { name: 'Guides', href: '#' },
-    { name: 'API Reference', href: '#' },
-  ],
-  company: [
-    { name: 'About', href: '#' },
-    { name: 'Blog', href: '#' },
-    { name: 'Jobs', href: '#' },
-    { name: 'Press', href: '#' },
-    { name: 'Partners', href: '#' },
-  ],
-  legal: [
-    { name: 'Claim', href: '#' },
-    { name: 'Privacy', href: '#' },
-    { name: 'Terms', href: '#' },
-  ],
-}
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')

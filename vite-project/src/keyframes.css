@@ -11,9 +11,9 @@
     100% {
       width: 100%;
     }
-  }
+}
   
-  .loader {
+.loader {
     border: black 2px solid;
     display: flex;
     justify-content: center;

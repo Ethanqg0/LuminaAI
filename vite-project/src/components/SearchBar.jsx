@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import PropTypes from 'prop-types';
 
 export default function SearchBar( {handleInputChange} ) {
     return (
@@ -7,3 +7,7 @@ export default function SearchBar( {handleInputChange} ) {
         </div>
     )
 }
+
+SearchBar.propTypes = {
+    handleInputChange: PropTypes.func.isRequired,
+};

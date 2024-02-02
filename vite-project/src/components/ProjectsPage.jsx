@@ -4,11 +4,11 @@ import Footer from './Footer.jsx';
 import Nav from './Nav.jsx';
 import Project from './Project.jsx';
 import SideBar from './SideBar.jsx';
-import { AuthContextProvider, useAuth } from '../contexts/AuthContext.jsx';
+import { useAuth } from '../contexts/AuthContext.jsx';
 import EmptyState from './EmptyState.jsx';
 
 export default function ProjectsPage() {
-  const { isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut } = useAuth();
+  const { isLoggedIn, setIsLoggedIn, token, setToken, signOut } = useAuth();
 
   const [creatingProject, setCreatingProject] = useState(false);
   const [selectedProject, setSelectedProject] = useState(null);
@@ -41,25 +41,6 @@ export default function ProjectsPage() {
     
       fetchProjects();
     }, [isLoggedIn, projects.length]); // Add isLoggedIn as a dependency
-
-  
-  const handleAddTask = async () => {
-    const updatedTaskList = [...taskList, newTask];
-    try {
-      await fetch(`http://localhost:3000/projects/${props.id}`, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${props.token}`,
-        },
-        body: JSON.stringify({ tasks: updatedTaskList }),
-      });
-    } catch (error) {
-      console.error('Error updating tasks:', error);
-    }
-    setTaskList(updatedTaskList);
-    setNewTask('');
-  };
   
   const updateLastModified = async () => {
     const timestampzone = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
@@ -156,10 +137,6 @@ export default function ProjectsPage() {
 
   const toggleCreateProject = () => {
     setCreatingProject(!creatingProject);
-  }
-
-  const toggleSelectedProject = () => {
-    setSelectedProject(!selectedProject);
   }
 
   const handleProjectSelect = (project) => {

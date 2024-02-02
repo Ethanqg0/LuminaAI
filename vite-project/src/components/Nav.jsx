@@ -1,9 +1,10 @@
 import { Fragment } from 'react'
 import { Disclosure, Menu, Transition } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { Link } from 'react-router-dom';
 import LuminaLogo from '../assets/Lumina.png';
 import headshot from '../assets/bulb.png';
+import PropTypes from 'prop-types';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
@@ -29,7 +30,6 @@ export default function Nav({signOut}) {
                 <div className="hidden sm:ml-6 sm:flex sm:space-x-8">
                   {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   <Link
-                    onClick={() => handleLinkClick('dashboard')}
                     to="/dashboard"
                     className="inline-flex items-center border-b-2 border-transparent px-1 pt-1 text-sm font-medium text-gray-500 hover:border-gray-300 hover:text-gray-700"
                   >
@@ -215,3 +215,7 @@ export default function Nav({signOut}) {
     </Disclosure>
   )
 }
+
+Nav.propTypes = {
+  signOut: PropTypes.func.isRequired
+};

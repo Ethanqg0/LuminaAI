@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 import SearchBar from './SearchBar';
-import React, { useState } from 'react';
+import { useState } from 'react';
 
 const SideBar = ({ projects, toggleCreateProject, handleProjectSelect, selectedProject }) => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -46,6 +46,7 @@ SideBar.propTypes = {
   projects: PropTypes.array.isRequired,
   toggleCreateProject: PropTypes.func.isRequired,
   handleProjectSelect: PropTypes.func.isRequired,
+  selectedProject: PropTypes.object,
 }
 
 export default SideBar;

@@ -1,11 +1,10 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext.jsx';
 
 export default function SignupPage() {
     const navigate = useNavigate();
     const { handleSignup } = useAuth();
-    const [error, setError] = useState(null);
 
     const [formData, setFormData] = useState({
         email: '',
@@ -17,7 +16,7 @@ export default function SignupPage() {
         e.preventDefault();
 
         try {
-          const response = await handleSignup(formData.email, formData.password, formData.confirmedPassword);
+          await handleSignup(formData.email, formData.password, formData.confirmedPassword);
           setFormData({
             email: '',
             password: '',

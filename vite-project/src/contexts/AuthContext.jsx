@@ -1,17 +1,18 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import { createContext, useContext, useState, useEffect } from 'react';
 import { redirect } from 'react-router-dom';
+import PropTypes from 'prop-types';
 
 const AuthContext = createContext();
 
 export const AuthContextProvider = ({ children }) => {
-  const [isLoggedIn, setIsLoggedIn] = useState('');
+  const [isLoggedIn, setIsLoggedIn] = useState(localStorage.getItem('email') || null);
   const [token, setToken] = useState(localStorage.getItem('token') || null);
 
   useEffect(() => {
     const token = localStorage.getItem('token');
     const email = localStorage.getItem('email');
 
-    if (token) {
+    if (token) { // TODO: fetch to backend to verify token
       setToken(token);
     }
 
@@ -40,7 +41,7 @@ export const AuthContextProvider = ({ children }) => {
         localStorage.setItem('email', email);
       }
     } catch (error) {
-      console.error('Failed to login:', error);
+      return error;
     }
   };
 
@@ -55,7 +56,6 @@ export const AuthContextProvider = ({ children }) => {
       })
 
       const data = await response.json();
-      console.log(data)
 
       setIsLoggedIn(email);
       setToken(data.token);
@@ -64,8 +64,7 @@ export const AuthContextProvider = ({ children }) => {
 
       return data;
     } catch (error) {
-      console.error('Failed to signup:', error);
-      return error;
+        return error;
     }
   }
 
@@ -87,4 +86,8 @@ export const AuthContextProvider = ({ children }) => {
 
 export const useAuth = () => {
   return useContext(AuthContext);
+};
+
+AuthContextProvider.propTypes = {
+  children: PropTypes.node.isRequired,
 };

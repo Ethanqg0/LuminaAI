@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import Nav from './Nav';
 import { useAuth } from '../contexts/AuthContext.jsx';
 import collapseUp from '../assets/collapseup.svg';
@@ -10,7 +10,13 @@ import { Link } from 'react-router-dom';
 
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
-  const { isLoggedIn, setIsLoggedIn, token, setToken, handleLogin, signOut } = useAuth();
+  const { isLoggedIn, setIsLoggedIn, token, signOut } = useAuth();
+  const [sectionStates, setSectionStates] = useState({
+      recentProjects: false,
+      upcomingProjects: false,
+      dueProjects: false,
+      completedProjects: false,
+  });
 
   const fetchProjects = async () => {
     try {
@@ -32,18 +38,10 @@ export default function Dashboard() {
       console.log('Error fetching projects:', error);
     }
   };
-
+  
   useEffect(() => {
     fetchProjects();
   }, [token, isLoggedIn]);
-
-  // Define section states using an object
-  const [sectionStates, setSectionStates] = useState({
-    recentProjects: false,
-    upcomingProjects: false,
-    dueProjects: false,
-    completedProjects: false,
-  });
 
   const toggleSection = (section) => {
     setSectionStates((prevStates) => ({
@@ -51,6 +49,7 @@ export default function Dashboard() {
       [section]: !prevStates[section],
     }));
   };
+
   const orderProjectsByTimestamp = (projects) => {
     const orderedProjects = projects.sort((a, b) => {
       const dateA = new Date(a.lastModified);
@@ -107,8 +106,8 @@ export default function Dashboard() {
   
   const renderProjects = (projectList) => {
     return projectList.map((project) => (
-      <Link to={"/projects"}>
-      <div key={project.id} className="flex flex-col w-full">
+      <Link key={project.id} to={"/projects"}>
+      <div className="flex flex-col w-full">
         <div className="pt-4 pb-4 flex flex-col hover:bg-neutral-100 bg-neutral-50 w-full">
           <h1 className="ml-2">{project.date}</h1>
           <h1 className="ml-2">{project.title}</h1>
@@ -141,9 +140,8 @@ export default function Dashboard() {
   };
   
   let value = 90;
-  const backgroundColorTest = getBackgroundColor(value);
-  
-
+  // const backgroundColorTest = getBackgroundColor(value);
+  // TODO: Currently hardcoding the value for the chart. Replace with actual data
   return (
     <div className="w-full h-full">
       <Nav signOut={signOut}/>
@@ -197,7 +195,7 @@ export default function Dashboard() {
             </div>
 
         </div>
-        <div id="progressBar" className="w-1/2 flex flex-col items-center">
+        <div className="w-1/2 flex flex-col items-center">
           <div className="flex flex-col items-center justify-center w-full border-l-2 h-1/2 bg-neutral-50">
             <h1 className="text-xl poppins font-semibold mb-6">Active Projects</h1>
             <Chart title={"Project(s) Progress"} value={40} backgroundColor={getBackgroundColor(40)}/>
