@@ -14,14 +14,14 @@ export default function ProjectsPage() {
   const [selectedProject, setSelectedProject] = useState(null);
   const [projects, setProjects] = useState([]);
 
-    // After login, set email to isLoggedIn and localStorage to isLoggedIn. If the page is refreshed, isLoggedIn will be undefined, so we need to check localStorage for the email.
     useEffect(() => {
+      const abortController = new AbortController();
+      const signal = abortController.signal;
+
       const fetchProjects = async () => {
         try {
           let userEmail = localStorage.getItem('email');
           setIsLoggedIn(userEmail);
-  
-          console.log(userEmail)
     
           const response = await fetch('http://localhost:3000', {
             method: 'POST',
@@ -30,17 +30,26 @@ export default function ProjectsPage() {
               'Authorization': `Bearer ${token}`,
             },
             body: JSON.stringify({ email: userEmail }),
+            signal,
           });
     
           const data = await response.json();
           setProjects(data);
         } catch (error) {
-          console.log('Error fetching projects:', error)
+            if (error.name === 'AbortError') {
+              console.log('Fetch aborted');
+            } else {
+              console.log("error fetching projects")
+            }
         }
       };
     
       fetchProjects();
-    }, [isLoggedIn, projects.length]); // Add isLoggedIn as a dependency
+
+      return function cleanup() {
+        abortController.abort();
+      }
+    }, [isLoggedIn, projects.length]);
   
   const updateLastModified = async () => {
     const timestampzone = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });

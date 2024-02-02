@@ -113,6 +113,6 @@ Project.propTypes = {
   date: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   tasks: PropTypes.array,
-  token: PropTypes.string, // Assuming you have a token prop for authorization
+  token: PropTypes.string,
   handleDeleteProject: PropTypes.func.isRequired,
 };
