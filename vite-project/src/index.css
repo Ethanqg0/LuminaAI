@@ -1,5 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@500&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@500&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@600&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -16,4 +17,59 @@ html, body, #root {
 
 .roboto {
   font-family: 'Roboto', sans-serif;
+}
+
+.poppins {
+  font-family: 'Poppins', sans-serif;
+}
+
+body, html, #root {
+  height: 100%;
+}
+
+.border-b-1 {
+  border-bottom-width: 1px;
+}
+
+.animate-slide-in {
+  animation: fadeInLeftToRight 1s;
+}
+
+.animate-slide-in-reverse {
+  animation: fadeInRightToLeft 1s;
+}
+
+.animate-opacity-in {
+  animation: fadeIn 1s;
+}
+
+.animate-opacity-out {
+  animation: fadeOut 1s;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInLeftToRight {
+  from {
+    transform: translateX(-100%);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+@keyframes fadeInRightToLeft {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(0);
+  }
 }

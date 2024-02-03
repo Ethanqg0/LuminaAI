@@ -11,6 +11,7 @@ import Calendar from './components/Calendar.jsx';
 import ConfirmEmail from './components/ConfirmEmail.jsx';
 import Dashboard from './components/Dashboard.jsx';
 import LandingPage from './components/LandingPage.jsx';
+import LandingPage2 from './components/LandingPage2.jsx';
 import LoginPage from './components/LoginPage.jsx';
 import ProjectsPage from './components/ProjectsPage.jsx';
 import SignupPage from './components/SignupPage.jsx';
@@ -30,7 +31,7 @@ const AppRoutes = () => {
 
     return (
         <Routes>
-            <Route path="/" element={<LandingPage />} />
+            <Route path="/" element={<LandingPage2 />} />
             <Route path="/login" element={<LoginPage />} />
             <Route path="/signup" element={<SignupPage />} />
             <Route path="/confirmEmail" element={<ConfirmEmail />} />
