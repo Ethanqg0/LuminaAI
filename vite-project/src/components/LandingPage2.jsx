@@ -1,6 +1,7 @@
 import React, { useRef, useEffect, useState } from 'react'
 import '../index.css'
 import Nav from './NavLanding.jsx'
+import Footer from './Footer.jsx'
 import {
   CloudArrowUpIcon,
   Cog6ToothIcon,
@@ -98,7 +99,7 @@ function App() {
   }, []);
 
   return (
-    <div className={isLightTheme ? "bg-white h-full overflow-auto w-full text-black" : "bg-black h-full overflow-auto w-full text-white"}>
+    <div className={isLightTheme ? "bg-white h-full overflow-auto w-full text-black" : "bg-gray-950 h-full overflow-auto w-full text-white"}>
       <Nav isLightTheme={isLightTheme} toggleTheme={toggleTheme}/>
       <section id="hero" ref={HeroRef} className="w-full h-full items-center justify-center flex">
         <div className={"animate-opacity-in w-1/2 h-1/2 flex flex-col justify-between mb-24"}>
@@ -222,7 +223,6 @@ function App() {
           </dl>
         </div>
       </section>
-
     </div>
   )
 }
