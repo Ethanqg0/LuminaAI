@@ -11,7 +11,7 @@ export default function Nav( {isLightTheme, toggleTheme} ) {
     };
 
     return (
-        <div className={isLightTheme ? "z-20 sticky top-0 flex items-center flex-row w-full h-16 bg-white text-black border-b-1 border-gray-400" : "z-20 sticky top-0 flex items-center flex-row w-full h-16 bg-red-500 text-white border-b-1 border-gray-600"}>
+        <div className={isLightTheme ? "z-20 shadow-md sticky top-0 flex items-center flex-row w-full h-16 bg-white text-black" : "z-50 sticky top-0 flex items-center flex-row w-full h-16 bg-gray-950 text-white shadow-md shadow-zinc-800"}>
             <ul className="flex justify-center w-1/4">
                 <h1 className="text-2xl mt-1">LuminaAI</h1>
             </ul>
