@@ -3,7 +3,12 @@
 ### Introduction:
 LuminaAI introduces a new era in project management, integrating a ChatGPT model to dynamically enhance project data with real-time feedback. Its primary aim is to offer a user-friendly interface coupled with advanced AI capabilities, facilitating productivity through immediate insights.
 
-[Insert Video Demo Here]
+### Demo:
+
+02-08-24:
+https://github.com/Ethanqg0/LuminaAI/assets/106004563/0ea44dcd-230f-4297-b2ae-520d4435f2bb
+
+
 
 ### Getting Started:
 Setup Instructions
@@ -22,7 +27,7 @@ AI-Powered Analytics: Utilize advanced AI algorithms to analyze project data and
 Robust Security Measures: Implementing security protocols such as JSON Web Tokens and hashed localStorage data ensures user information remains protected
 
 ### Wireframes
-<img width="473" alt="Screenshot 2024-02-08 at 5 00 12 PM" src="https://github.com/Ethanqg0/LuminaAI/assets/106004563/60b068bf-9a4a-4f94-9db2-3486d2a8b580">
+<img width="673" alt="Screenshot 2024-02-08 at 5 00 12 PM" src="https://github.com/Ethanqg0/LuminaAI/assets/106004563/60b068bf-9a4a-4f94-9db2-3486d2a8b580">
 
 ### Open-Source
 LuminaAI is open-source and is open to contributions and collaborations! :)
