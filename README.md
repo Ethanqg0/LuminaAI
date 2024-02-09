@@ -1,4 +1,7 @@
-# LuminaAI: The future of Project Management
+# LuminaAI: The Future of Project Management
+<img width="50" src="https://github.com/Ethanqg0/LuminaAI/assets/106004563/8b0e6eb1-04e8-452d-9f66-082ceb02d59b"> 
+
+
 
 ### Introduction:
 LuminaAI introduces a new era in project management, integrating a ChatGPT model to dynamically enhance project data with real-time feedback. Its primary aim is to offer a user-friendly interface coupled with advanced AI capabilities, facilitating productivity through immediate insights.
