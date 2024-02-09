@@ -21,5 +21,8 @@ Interactive Dashboard: Gain insights into project and task progress through a dy
 AI-Powered Analytics: Utilize advanced AI algorithms to analyze project data and receive actionable feedback for enhanced decision-making
 Robust Security Measures: Implementing security protocols such as JSON Web Tokens and hashed localStorage data ensures user information remains protected
 
+### Wireframes
+<img width="473" alt="Screenshot 2024-02-08 at 5 00 12 PM" src="https://github.com/Ethanqg0/LuminaAI/assets/106004563/60b068bf-9a4a-4f94-9db2-3486d2a8b580">
+
 ### Open-Source
 LuminaAI is open-source and is open to contributions and collaborations! :)
